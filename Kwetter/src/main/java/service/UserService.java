@@ -1,38 +1,61 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package service;
 
-import dao.JPA;
-import dao.UserDao;
+import database.JPA;
+import database.managers.UserDbManager;
 import domain.User;
 import java.util.ArrayList;
+import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-public class UserService {
-  
-    @Inject @JPA
-    private UserDao userDao;
+public class UserService
+{
 
-     public void addUser(User user) {
-         userDao.create(user);
-    }
-    
-    public void removeUser(User user) {
-       userDao.remove(user);
-    }
-         
-    public ArrayList<User> getUseren() {
-        return userDao.getUsers();
+    @Inject
+    @JPA
+    private UserDbManager userDbManager;
+
+    public UserService()
+    {
     }
 
-    public User findByName(String name) {
-        return userDao.findByName(name);
+    public User getUser(long id)
+    {
+        return userDbManager.get(id).Convert();
     }
-    
-    public UserService() {
-    }  
+
+    public User getUserWithEmail(String email)
+    {
+        return userDbManager.getWithEmail(email).Convert();
+    }
+
+    public Collection<User> getUsers()
+    {
+        Collection<User> users = new ArrayList<>();
+        userDbManager.getAll().forEach(x ->
+        {
+            users.add(x.Convert());
+        });
+        return users;
+    }
+
+    public void addUser(User user)
+    {
+        userDbManager.create(user.Convert());
+    }
+
+    public void updateUser(User user)
+    {
+        database.objects.User databaseUser = userDbManager.get(user.getId());
+        databaseUser.setEmail(user.getEmail());
+        databaseUser.setProfile(user.getProfile().Convert());
+        userDbManager.update(databaseUser);
+    }
+
+    public void removeUser(User user)
+    {
+        database.objects.User databaseUser = userDbManager.get(user.getId());
+        userDbManager.delete(databaseUser);
+    }
 }

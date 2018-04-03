@@ -1,82 +1,79 @@
 package domain;
 
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
-@Table(name = "UserEntity")
 @XmlRootElement
-public class User implements Serializable {
-    
-    @Id @GeneratedValue
+public class User implements Serializable
+{
     private Long id;   
-    @Column(unique=true)
-    private String name;
-    private Integer age;
-    private String skill;
+    private String email;
+    private String password;
+    private Profile profile;
 
-    public User() {
-    }
-
-    public User(String name, Integer age, String skill) {
-        this.name = name;
-        this.age = age;
-        this.skill = skill;
-    }
-
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail()
+    {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPassword()
+    {
+        return password;
     }
 
-    public void setAge(Integer Age) {
-        this.age = Age;
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
-    public String getSkill() {
-        return skill;
+    public Profile getProfile()
+    {
+        return profile;
     }
 
-    public void setSkill(String Skill) {
-        this.skill = Skill;
+    public void setProfile(Profile profile)
+    {
+        this.profile = profile;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.id);
-        return hash;
+    public User(Long id, String email, Profile profile)
+    {
+        this.id = id;
+        this.email = email;
+        this.profile = profile;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        return Objects.equals(this.name, other.name);
+    
+    public User(String email, String password, Profile profile)
+    {
+        this.email = email;
+        this.password = password;
+        this.profile = profile;
+    }
+    
+    public User(database.objects.User user)
+    {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.profile = user.getProfile().Convert();
+    }
+    
+    public database.objects.User Convert()
+    {
+        return new database.objects.User(this);
     }
 }
