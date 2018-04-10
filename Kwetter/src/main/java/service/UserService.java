@@ -1,6 +1,5 @@
 package service;
 
-import database.JPA;
 import database.managers.UserDbManager;
 import domain.User;
 import java.util.ArrayList;
@@ -11,9 +10,7 @@ import javax.inject.Inject;
 @Stateless
 public class UserService
 {
-
     @Inject
-    @JPA
     private UserDbManager userDbManager;
 
     public UserService()

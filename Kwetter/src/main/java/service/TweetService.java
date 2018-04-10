@@ -1,6 +1,5 @@
 package service;
 
-import database.JPA;
 import database.managers.TweetDbManager;
 import domain.Tweet;
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 public class TweetService
 {
     @Inject
-    @JPA
     private TweetDbManager tweetDbManager;
 
     public TweetService()

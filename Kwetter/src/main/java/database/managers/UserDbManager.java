@@ -1,6 +1,5 @@
 package database.managers;
 
-import database.JPA;
 import database.interfaces.IUserDbManager;
 import database.objects.User;
 import java.util.Collection;
@@ -8,10 +7,8 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 
 @Stateless
-@JPA
 public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
 {
-
     @PersistenceContext
     private EntityManager em;
 
