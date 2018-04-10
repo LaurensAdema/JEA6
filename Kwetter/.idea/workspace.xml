@@ -6,32 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af19d8ed-e2b0-4d21-9638-010e847e0130" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/boundary/rest/JAXRSConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/JAXRSConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/boundary/rest/TweetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/rest/TweetController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/boundary/rest/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/rest/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/interfaces/IBaseDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/interfaces/IBaseDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/interfaces/ITweetDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/interfaces/ITweetDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/interfaces/IUserDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/interfaces/IUserDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/managers/BaseDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/managers/BaseDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/managers/TweetDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/managers/TweetDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/managers/UserDbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/managers/UserDbManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/objects/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/objects/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/objects/Tweet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/objects/Tweet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/objects/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/database/objects/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/domain/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/Tweet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/domain/Tweet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/domain/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/StartUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/StartUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/TweetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/service/TweetService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ladema/kwetter/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/beans.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/beans.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/unittests/services/TweetServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ladema/kwetter/unittests/services/TweetServiceTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/unittests/services/UserServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ladema/kwetter/unittests/services/UserServiceTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Kwetter/WEB-INF/beans.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/Kwetter/WEB-INF/beans.xml" afterDir="false" />
-    </list>
+    <list default="true" id="af19d8ed-e2b0-4d21-9638-010e847e0130" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -591,7 +566,7 @@
       <workItem from="1521548207632" duration="455000" />
       <workItem from="1522323960921" duration="10000" />
       <workItem from="1523361829023" duration="962000" />
-      <workItem from="1523362822223" duration="5809000" />
+      <workItem from="1523362822223" duration="6207000" />
     </task>
     <task id="LOCAL-00001" summary="Poging 533">
       <created>1523363648690</created>
@@ -612,10 +587,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7236000" />
+    <option name="totallyTimeSpent" value="7634000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -639,7 +614,7 @@
       <window_info anchor="bottom" id="Java Enterprise" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" visible="true" weight="0.32943678" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" weight="0.32943678" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Persistence" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18020834" />
@@ -849,7 +824,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
-          <last-edited />
+          <last-edited>JPA (Kwetter)|JPA</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -908,7 +883,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited />
+          <last-edited>Maven: antlr:antlr:2.7.7</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
