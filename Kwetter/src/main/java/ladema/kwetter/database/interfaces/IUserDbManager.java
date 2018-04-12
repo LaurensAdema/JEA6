@@ -13,5 +13,5 @@ import ladema.kwetter.database.objects.User;
  */
 public interface IUserDbManager extends IBaseDbManager<User>
 {
-    
+    User getWithEmail(String email);
 }

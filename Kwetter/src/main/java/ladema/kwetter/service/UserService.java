@@ -1,5 +1,6 @@
 package ladema.kwetter.service;
 
+import ladema.kwetter.database.interfaces.IUserDbManager;
 import ladema.kwetter.database.managers.UserDbManager;
 import ladema.kwetter.domain.User;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 public class UserService
 {
     @Inject
-    private UserDbManager userDbManager;
+    private IUserDbManager userDbManager;
 
     public UserService()
     {

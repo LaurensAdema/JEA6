@@ -1,5 +1,6 @@
 package ladema.kwetter.service;
 
+import ladema.kwetter.database.interfaces.ITweetDbManager;
 import ladema.kwetter.database.managers.TweetDbManager;
 import ladema.kwetter.domain.Tweet;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 public class TweetService
 {
     @Inject
-    private TweetDbManager tweetDbManager;
+    private ITweetDbManager tweetDbManager;
 
     public TweetService()
     {
