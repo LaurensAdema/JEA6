@@ -68,4 +68,16 @@
             <version>6.4.0.jre8</version>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>b9638f4b0b3f-releases</name>
+            <url>https://artifactory.ade.ma/artifactory/release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>b9638f4b0b3f-snapshots</name>
+            <url>https://artifactory.ade.ma/artifactory/release-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
