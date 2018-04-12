@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="dev.ade.ma" uuid="68488e8d-2aec-4916-bbe1-a1e519da40ee">
+      <database-info product="Microsoft SQL Server" version="14.00.3023" jdbc-version="4.2" driver-name="Microsoft JDBC Driver 6.4 for SQL Server" driver-version="6.4.0.0">
+        <extra-name-characters>$#@</extra-name-characters>
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>kwetter</user-name>
+      <introspection-schemas>kwetter:dbo</introspection-schemas>
+    </data-source>
+  </component>
+</project>
