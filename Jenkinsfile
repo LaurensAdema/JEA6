@@ -3,13 +3,14 @@ pipeline {
         docker {
             image 'maven:3-alpine'
             args '-v $HOME/.m2:/root/.m2'
+            reuseNode true
         }
     }
 
     stages {
         stage('Build') {
             steps {
-                sh 'make' 
+                sh 'make'
                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
             }
         }
@@ -18,21 +19,22 @@ pipeline {
                 /* `make check` returns non-zero on test failures,
                 * using `true` to allow the Pipeline to continue nonetheless
                 */
-                sh 'make check || true' 
-                junit '**/target/*.xml' 
+                sh 'make check || true'
+                junit '**/target/*.xml'
             }
         }
-		stage('SonarQube analysis') {
-			withSonarQubeEnv('My SonarQube Server') {
-			// requires SonarQube Scanner for Maven 3.2+
-			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-			}
-		  }
-		stage('Deploy') {
+        stage('Artifactory') {
+            steps {
+                configFileProvider([configFile(fileId: 'artifactory-settings', variable: 'artifactory-settings')]) {
+                    sh 'mvn -s $artifactory-settings clean package deploy -DskipTests -B'
+                }
+            }
+        }
+        stage('Deploy') {
             when {
-              expression {
-                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
-              }
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                }
             }
             steps {
                 sh 'make publish'
