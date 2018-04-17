@@ -16,12 +16,19 @@ public class UserService
 
     public User getUser(long id)
     {
-        return userDbManager.get(id).Convert();
+        ma.ade.kwetter2.database.objects.User result = userDbManager.get(id);
+        if (result == null)
+            return null;
+        else
+            return result.Convert();
     }
 
-    public User getUserWithEmail(String email)
-    {
-        return userDbManager.getWithEmail(email).Convert();
+    public User getUserByEmail(String email) {
+       ma.ade.kwetter2.database.objects.User result = userDbManager.getByEmail(email);
+        if (result == null)
+            return null;
+        else
+            return result.Convert();
     }
 
     public Collection<User> getUsers()
@@ -32,9 +39,9 @@ public class UserService
         return users;
     }
 
-    public void addUser(User user)
+    public User addUser(User user)
     {
-        userDbManager.create(user.Convert());
+        return userDbManager.create(user.Convert()).Convert();
     }
 
     public void updateUser(User user)
@@ -45,9 +52,8 @@ public class UserService
         userDbManager.update(databaseUser);
     }
 
-    public void removeUser(User user)
+    public void removeUser(long userID)
     {
-        ma.ade.kwetter2.database.objects.User databaseUser = userDbManager.get(user.getId());
-        userDbManager.delete(databaseUser);
+        userDbManager.delete(userID);
     }
 }

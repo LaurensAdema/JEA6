@@ -8,9 +8,9 @@ public interface IBaseDbManager<T>
     
     Collection<T> getAll();
     
-    void create(T entity);
+    T create(T entity);
 
     void update(T entity);
 
-    void delete(T entity);
+    void delete(long id);
 }

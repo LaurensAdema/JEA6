@@ -6,6 +6,7 @@ import ma.ade.kwetter2.database.objects.User;
 import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Stateless
 public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
@@ -24,12 +25,12 @@ public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
         return em;
     }
 
-    public User getWithEmail(String email)
-    {
-        return (User) em.createQuery(
-                "SELECT u FROM User u WHERE u.email LIKE :email")
-                .setParameter("email", email)
-                .getResultList().get(0);
+    public User getByEmail(String email) {
+        List results = em.createQuery("SELECT u FROM User u WHERE u.email LIKE :email").setParameter("email", email).getResultList();
+        if(results.isEmpty())
+            return null;
+        else
+            return (User) results.get(0);
     }
 
     public Collection<User> getAll()

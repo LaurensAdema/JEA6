@@ -23,7 +23,7 @@ public class StartUp {
     private void intData(){
         User user1 = new User("laurens1@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg"));
         userService.addUser(user1);
-        user1 = userService.getUserWithEmail(user1.getEmail());
+        user1 = userService.getUserByEmail(user1.getEmail());
         userService.addUser(new User("laurens2@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg")));
         userService.addUser(new User("laurens3@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg")));
         userService.addUser(new User("laurens4@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg")));

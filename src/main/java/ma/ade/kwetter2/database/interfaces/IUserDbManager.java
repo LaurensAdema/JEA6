@@ -13,5 +13,5 @@ import ma.ade.kwetter2.database.objects.User;
  */
 public interface IUserDbManager extends IBaseDbManager<User>
 {
-    User getWithEmail(String email);
+    User getByEmail(String email);
 }

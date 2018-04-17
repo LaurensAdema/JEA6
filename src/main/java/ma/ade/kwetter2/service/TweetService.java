@@ -17,7 +17,11 @@ public class TweetService
 
     public Tweet getTweet(long id)
     {
-        return tweetDbManager.get(id).Convert();
+        ma.ade.kwetter2.database.objects.Tweet result = tweetDbManager.get(id);
+        if (result == null)
+            return null;
+        else
+            return result.Convert();
     }
 
     public Collection<Tweet> getTweets()
@@ -28,9 +32,9 @@ public class TweetService
         return tweets;
     }
 
-    public void addTweet(Tweet tweet)
+    public Tweet addTweet(Tweet tweet)
     {
-        tweetDbManager.create(tweet.Convert());
+        return tweetDbManager.create(tweet.Convert()).Convert();
     }
 
     public void updateTweet(Tweet tweet)
@@ -40,9 +44,8 @@ public class TweetService
         tweetDbManager.update(databaseTweet);
     }
 
-    public void removeTweet(Tweet tweet)
+    public void removeTweet(long tweetID)
     {
-        ma.ade.kwetter2.database.objects.Tweet databaseTweet = tweetDbManager.get(tweet.getId());
-        tweetDbManager.delete(databaseTweet);
+        tweetDbManager.delete(tweetID);
     }
 }
