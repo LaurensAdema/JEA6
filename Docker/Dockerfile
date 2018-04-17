@@ -6,7 +6,7 @@ RUN wget -O $PAYARA_PATH/database-connector.jar http://repo2.maven.org/maven2/co
 COPY --chown=payara config/payara/domain.xml $PAYARA_PATH
 RUN ls -al $PAYARA_PATH
 
-COPY kwetter.war $PAYARA_PATH
+COPY kwetter2.war $PAYARA_PATH
 
 EXPOSE 8080 8081
 
