@@ -10,4 +10,4 @@ COPY kwetter2.war $PAYARA_PATH
 
 EXPOSE 8080 8081
 
-ENTRYPOINT ["java", "-jar", "/opt/payara/payara-micro.jar", "--domainConfig", "/opt/payara/domain.xml", "--addJars", "/opt/payara/database-connector.jar", "--deploy", "/opt/payara/kwetter.war"]
+ENTRYPOINT ["java", "-jar", "/opt/payara/payara-micro.jar", "--domainConfig", "/opt/payara/domain.xml", "--addJars", "/opt/payara/database-connector.jar", "--deploy", "/opt/payara/kwetter2.war"]
