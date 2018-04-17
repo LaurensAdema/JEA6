@@ -40,6 +40,12 @@ pipeline {
             }
         }
         stage('Deploy stack test') {
+            agent {
+                docker {
+                    image 'docker:17.12-dind'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             when {
                 branch 'dev'
             }
@@ -48,6 +54,12 @@ pipeline {
             }
         }
         stage('Deploy stack master') {
+            agent {
+                docker {
+                    image 'docker:17.12-dind'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             when {
                 branch 'master'
             }
