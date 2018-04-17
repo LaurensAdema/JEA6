@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Artifactory') {
             steps {
-                configFileProvider([configFile(fileId: 'artifactory-settings', variable: 'artifactory-settings')]) {
+                configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'artifactory-settings')]) {
                     sh 'mvn -s $artifactory-settings clean package deploy -DskipTests -B'
                 }
             }
