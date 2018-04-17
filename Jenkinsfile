@@ -23,15 +23,15 @@ pipeline {
         }
         stage('Test & Sonarqube') {
             steps {
-                configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'sonar-settings')]) {
-                    sh 'mvn -s $sonar-settings clean package sonar:sonar -B'
+                configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'SonarSettings')]) {
+                    sh 'mvn -s $SonarSettings clean package sonar:sonar -B'
                 }
             }
         }
         stage('Artifactory') {
             steps {
-                configFileProvider([configFile(fileId: 'artifactory-settings', variable: 'artifactory-settings')]) {
-                    sh 'mvn -s $artifactory-settings clean package deploy -DskipTests -B'
+                configFileProvider([configFile(fileId: 'artifactory-settings', variable: 'ArtifactorySettings')]) {
+                    sh 'mvn -s $ArtifactorySettings clean package deploy -DskipTests -B'
                 }
             }
         }
