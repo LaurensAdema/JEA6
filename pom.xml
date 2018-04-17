@@ -127,12 +127,12 @@
         <repository>
             <id>central</id>
             <name>b9638f4b0b3f-releases</name>
-            <url>http://192.168.1.11:2784/artifactory/release-local</url>
+            <url>http://localhost:2784/artifactory/release-local</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>b9638f4b0b3f-snapshots</name>
-            <url>http://192.168.1.11:2784/artifactory/release-local</url>
+            <url>http://localhost:2784/artifactory/release-local</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
