@@ -40,7 +40,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
-                    <imageName>kwetter:latest</imageName>
+                    <imageName>${project.groupId}/${project.artifactId}</imageName>
                     <dockerDirectory>Docker</dockerDirectory>
                     <resources>
                         <resource>
