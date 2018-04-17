@@ -1,7 +1,9 @@
 pipeline {
+    environment {
+        DOCKER_HOST = 'tcp://0.0.0.0:2375'
+    }
     agent {
         docker {
-            url = System.env.DOCKER_HOST
             image 'maven:3-alpine'
             args '-v $HOME/.m2:/root/.m2'
             reuseNode true
