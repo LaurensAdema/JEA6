@@ -48,10 +48,6 @@ pipeline {
                 sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
             }
         }
-            steps {
-                sh 'mvn clean verify'
-            }
-        }
         stage('Deploy stack master') {
             when {
                 branch 'master'
