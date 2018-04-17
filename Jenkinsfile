@@ -28,6 +28,11 @@ pipeline {
                 }
             }
         }
+        stage('Integration tests') {
+            steps {
+                sh 'mvn clean verify'
+            }
+        }
         stage('Artifactory') {
             steps {
                 configFileProvider([configFile(fileId: 'artifactory-settings', variable: 'ArtifactorySettings')]) {
@@ -35,45 +40,26 @@ pipeline {
                 }
             }
         }
-//        stage('Deploy stack test') {
-//            agent {
-//                docker {
-//                    image 'docker:17.12-dind'
-//                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-//                    reuseNode true
-//                }
-//            }
-//            when {
-//                branch 'sop'
-//            }
-//            steps {
-//                sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
-//            }
-//        }
-//            steps {
-//                sh 'mvn clean verify'
-//            }
-//        }
-        stage('Integration tests') {
+        stage('Deploy stack test') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
+            }
+        }
             steps {
                 sh 'mvn clean verify'
             }
         }
-//        stage('Deploy stack master') {
-//            agent {
-//                docker {
-//                    image 'docker:17.12-dind'
-//                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-//                    reuseNode true
-//                }
-//            }
-//            when {
-//                branch 'dev'
-//            }
-//            steps {
-//                sh 'docker stack deploy -c config/stack.yml kwetter'
-//            }
-//        }
+        stage('Deploy stack master') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'docker stack deploy -c config/stack.yml kwetter'
+            }
+        }
         stage('success') {
             steps {
                 script {
