@@ -9,10 +9,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'mvn -B -DskipTests clean package'
+                archiveArtifacts artifacts: 'target/', fingerprint: true
+            }
+        }
+        stage('Build image') {
+            steps {
                 sh 'mvn clean package docker:build -DskipTests'
             }
         }
-        stage('Test') {
+        stage('Test & Sonarqube') {
             steps {
                 configFileProvider([configFile(fileId: 'f713633d-bca9-449b-98f3-2b2fff5297c5', variable: 'sonar-settings')]) {
                     sh 'mvn -s $sonar-settings clean package sonar:sonar -B'
@@ -45,6 +51,11 @@ pipeline {
 //                sh 'mvn clean verify'
 //            }
 //        }
+        stage('Integration tests') {
+            steps {
+                sh 'mvn clean verify'
+            }
+        }
 //        stage('Deploy stack master') {
 //            agent {
 //                docker {
