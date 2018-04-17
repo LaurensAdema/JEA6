@@ -9,17 +9,14 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'make'
-                archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+                sh 'mvn clean package docker:build -DskipTests'
             }
         }
         stage('Test') {
             steps {
-                /* `make check` returns non-zero on test failures,
-                * using `true` to allow the Pipeline to continue nonetheless
-                */
-                sh 'make check || true'
-                junit '**/target/*.xml'
+                configFileProvider([configFile(fileId: 'f713633d-bca9-449b-98f3-2b2fff5297c5', variable: 'sonar-settings')]) {
+                    sh 'mvn -s $sonar-settings clean package sonar:sonar -B'
+                }
             }
         }
         stage('Artifactory') {
@@ -29,15 +26,65 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
-            when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+//        stage('Deploy stack test') {
+//            agent {
+//                docker {
+//                    image 'docker:17.12-dind'
+//                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+//                    reuseNode true
+//                }
+//            }
+//            when {
+//                branch 'sop'
+//            }
+//            steps {
+//                sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
+//            }
+//        }
+//            steps {
+//                sh 'mvn clean verify'
+//            }
+//        }
+//        stage('Deploy stack master') {
+//            agent {
+//                docker {
+//                    image 'docker:17.12-dind'
+//                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+//                    reuseNode true
+//                }
+//            }
+//            when {
+//                branch 'dev'
+//            }
+//            steps {
+//                sh 'docker stack deploy -c config/stack.yml kwetter'
+//            }
+//        }
+        stage('success') {
+            steps {
+                script {
+                    currentBuild.result = 'SUCCESS'
                 }
             }
-            steps {
-                sh 'make publish'
+        }
+    }
+    post {
+        changed {
+            script {
+                if (currentBuild.result == 'FAILURE') {
+                    step([$class           : 'Mailer',
+                          recipients       : emailextrecipients([[$class: 'CulpritsRecipientProvider'],
+                                                                 [$class: 'RequesterRecipientProvider']]),
+                          sendToIndividuals: true])
+                }
+                if (currentBuild.result == 'SUCCESS') {
+                    step([$class           : 'Mailer',
+                          recipients       : emailextrecipients([[$class: 'CulpritsRecipientProvider'],
+                                                                 [$class: 'DevelopersRecipientProvider']]),
+                          sendToIndividuals: true])
+                }
             }
+
         }
     }
 }

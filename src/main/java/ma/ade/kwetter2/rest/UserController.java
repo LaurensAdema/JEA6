@@ -39,19 +39,14 @@ public class UserController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{input}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User GetUser(@PathParam("id") long id) {
-        User user = userService.getUser(id);
-        return user;
-    }
-
-    @GET
-    @Path("/{email}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
-    public User GetUserByEmail(@PathParam("email") String email) {
-        User user = userService.getUserByEmail(email);
-        return user;
+    public User GetUser(@PathParam("input") String input) {
+        try {
+            long id = Long.parseLong(input);
+            return userService.getUser(id);
+        } catch (Exception e) {
+            return userService.getUserByEmail(input);
+        }
     }
 }

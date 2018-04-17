@@ -2,6 +2,7 @@ package ma.ade.kwetter2.rest;
 
 import ma.ade.kwetter2.domain.Tweet;
 import ma.ade.kwetter2.service.TweetService;
+import ma.ade.kwetter2.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,6 +17,9 @@ public class TweetController {
     @Inject
     private TweetService tweetService;
 
+    @Inject
+    private UserService userService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Tweet> GetTweets() {
@@ -25,6 +29,7 @@ public class TweetController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Tweet AddTweet(Tweet tweet){
+        tweet.setUser(userService.getUser(1));
         return tweetService.addTweet(tweet);
     }
 
