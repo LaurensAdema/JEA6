@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        DOCKER_HOST = 'tcp://0.0.0.0:2375'
+        DOCKER_HOST = 'unix:///private/var/tmp/docker.sock'
     }
     agent {
         docker {
