@@ -76,6 +76,7 @@
         <dependency>
             <groupId>org.arquillian.universe</groupId>
             <artifactId>arquillian-junit</artifactId>
+            <version>1.0.0.Alpha5</version>
             <scope>test</scope>
             <type>pom</type>
         </dependency>
