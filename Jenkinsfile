@@ -40,33 +40,25 @@ pipeline {
             }
         }
         stage('Deploy Dev') {
-            agent {
-                docker {
-                    image 'docker:18.03.0-ce-dind'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             when {
                 branch 'dev'
             }
             steps {
-                sh 'docker run -d -p 59388:8080 --name kwetter ma.ade/kwetter2:latest'
-                //sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
+				sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/stop'
+				sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter'
+                sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter'
+				sh 'curl -v -X POST -H http://192.168.1.11:2375/containers/dev.kwetter/start'
             }
         }
         stage('Deploy Master') {
-            agent {
-                docker {
-                    image 'docker:18.03.0-ce-dind'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             when {
                 branch 'master'
             }
             steps {
-                sh 'docker run -d -p 5938:8080 --name kwetter ma.ade/kwetter2:latest'
-                //sh 'docker stack deploy -c config/stack.yml kwetter'
+				sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
+				sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
+                sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
+				sh 'curl -v -X POST -H http://192.168.1.11:2375/containers/kwetter/start'
             }
         }
         stage('success') {
