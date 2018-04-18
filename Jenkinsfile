@@ -39,10 +39,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy stack test') {
+        stage('Deploy Dev') {
             agent {
                 docker {
-                    image 'docker:17.12-dind'
+                    image 'docker:18.03.0-ce-dind'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
@@ -50,13 +50,14 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
+                sh 'docker run -d -p 59388:8080 --name kwetter ma.ade/kwetter2:latest'
+                //sh 'docker stack deploy -c config/test-stack.yml kwetter-test'
             }
         }
-        stage('Deploy stack master') {
+        stage('Deploy Master') {
             agent {
                 docker {
-                    image 'docker:17.12-dind'
+                    image 'docker:18.03.0-ce-dind'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
@@ -64,7 +65,8 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'docker stack deploy -c config/stack.yml kwetter'
+                sh 'docker run -d -p 5938:8080 --name kwetter ma.ade/kwetter2:latest'
+                //sh 'docker stack deploy -c config/stack.yml kwetter'
             }
         }
         stage('success') {
@@ -91,7 +93,6 @@ pipeline {
                           sendToIndividuals: true])
                 }
             }
-
         }
     }
 }

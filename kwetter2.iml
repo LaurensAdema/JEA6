@@ -20,7 +20,7 @@
           <factory-entry name="Entities" />
           <factory-entry name="kwetter2" value="68488e8d-2aec-4916-bbe1-a1e519da40ee" />
         </datasource-mapping>
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/test/resources/persistence.xml" />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>

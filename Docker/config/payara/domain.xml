@@ -30,12 +30,12 @@
             <property name="networkProtocol" value="TCP"></property>
             <property name="portNumber" value="1433"></property>
         </jdbc-connection-pool>
-        <jdbc-resource pool-name="mssql" jndi-name="jdbc/kwetter2"></jdbc-resource>
+        <jdbc-resource pool-name="mssql" jndi-name="jdbc/kwetter"></jdbc-resource>
     </resources>
     <servers>
         <server config-ref="server-config" name="server">
             <resource-ref ref="jdbc/__default"></resource-ref>
-            <resource-ref ref="jdbc/kwetter2"></resource-ref>
+            <resource-ref ref="jdbc/kwetter"></resource-ref>
             <resource-ref ref="concurrent/__defaultContextService"></resource-ref>
             <resource-ref ref="concurrent/__defaultManagedExecutorService"></resource-ref>
             <resource-ref ref="concurrent/__defaultManagedScheduledExecutorService"></resource-ref>
@@ -86,7 +86,7 @@
                     <property name="group-name-column" value="name"></property>
                     <property name="group-table" value="v_realm"></property>
                     <property name="user-table" value="UserEntity"></property>
-                    <property name="datasource-jndi" value="jdbc/kwetter2"></property>
+                    <property name="datasource-jndi" value="jdbc/kwetter"></property>
                     <property name="jaas-context" value="jdbcRealm"></property>
                     <property name="digest-algorithm" value="SHA-256"></property>
                     <property name="encoding" value="Base64"></property>
