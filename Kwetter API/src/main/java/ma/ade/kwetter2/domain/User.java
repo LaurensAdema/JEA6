@@ -51,6 +51,9 @@ public class User implements Serializable
         this.profile = profile;
     }
 
+    public User() {
+    }
+
     public User(Long id, String email, Profile profile)
     {
         this.id = id;

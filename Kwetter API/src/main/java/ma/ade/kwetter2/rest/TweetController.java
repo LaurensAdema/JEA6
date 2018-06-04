@@ -33,9 +33,9 @@ public class TweetController {
     }
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response AddTweet(Tweet tweet){
-        tweet.setUser(userService.getUser(1));
         Tweet createdTweet = tweetService.addTweet(tweet);
         return Response.ok(createdTweet).build();
     }

@@ -84,6 +84,9 @@ public class Profile implements Serializable
         this.pictureLocation = pictureLocation;
     }
 
+    public Profile() {
+    }
+
     public Profile(Long id, String firstName, String lastName, String bio, String location, String website, String pictureLocation)
     {
         this.id = id;

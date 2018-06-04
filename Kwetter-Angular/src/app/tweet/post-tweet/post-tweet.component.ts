@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Tweet} from '../../domain/tweet';
-import {TweetService} from '../../tweet.service';
+import {TweetService} from '../../api/tweet.service';
 import {User} from '../../domain/user';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-post-tweet',
@@ -18,10 +19,16 @@ export class PostTweetComponent implements OnInit {
 
   ngOnInit() {
     this.model = new Tweet();
-    this.model.user = this.user;
   }
 
   onSubmit() {
     this.model.date = new Date();
+    this.model.user = this.user;
+    console.log(JSON.stringify(this.model));
+    this.tweetService.postTweet(this.model).subscribe(
+      response => {
+        console.log(response);
+      }
+    );
   }
 }

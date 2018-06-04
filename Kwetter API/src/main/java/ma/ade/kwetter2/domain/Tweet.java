@@ -46,6 +46,9 @@ public class Tweet implements Serializable
 
     public void setDate(Date date) { this.date = date; }
 
+    public Tweet() {
+    }
+
     public Tweet(Long id, String message, User user, Date date)
     {
         this.id = id;

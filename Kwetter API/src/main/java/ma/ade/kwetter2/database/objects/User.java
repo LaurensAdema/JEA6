@@ -20,6 +20,14 @@ public class User implements Serializable {
 
     public User() {
     }
+
+    public User(long id, String email, String password, Profile profile)
+    {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.profile = profile;
+    }
     
     public User(String email, String password, Profile profile)
     {

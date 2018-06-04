@@ -23,6 +23,16 @@ public class Profile implements Serializable {
     public Profile() {
     }
 
+    public Profile(Long id, String firstName, String lastName, String bio, String location, String website, String pictureLocation) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.bio = bio;
+        this.location = location;
+        this.website = website;
+        this.pictureLocation = pictureLocation;
+    }
+
     public Profile(String firstName, String lastName, String bio, String location, String website, String pictureLocation)
     {
         this.firstName = firstName;

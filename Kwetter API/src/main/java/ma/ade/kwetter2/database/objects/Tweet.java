@@ -18,6 +18,14 @@ public class Tweet implements Serializable {
     public Tweet() {
     }
 
+    public Tweet(Long id, String message, User user, Date date)
+    {
+        this.id = id;
+        this.message = message;
+        this.user = user;
+        this.date = date;
+    }
+
     public Tweet(String message, User user, Date date)
     {
         this.message = message;

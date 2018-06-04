@@ -1,10 +1,10 @@
 <section class="post-tweet">
   <form (ngSubmit)="onSubmit()" #postTweetForm="ngForm" class="md-form">
-    <textarea type="text" id="form-mess" class="md-textarea"  (blur)="focused=false" (focus)="focused=true"
+    <textarea type="text" id="form-mess" class="md-textarea"  (blur)="focused=false" (focus)="focused=true" (keydown.enter)="$event.preventDefault();postTweetForm.submit();"
               maxlength="140" required id="tweet" required [(ngModel)]="model.message" name="tweet" #tweet="ngModel">
     </textarea>
     <label for="form-mess" [ngClass]="{'active':focused}">What are you thinking about?</label>
-    <button  type="submit" class="btn btn-primary waves-effect waves-light float-right" [disabled]="!postTweetForm.form.valid">Tweet</button>
+    <button type="submit" class="btn btn-primary waves-effect waves-light float-right" [disabled]="!postTweetForm.form.valid">Tweet</button>
   </form>
 </section>
 
