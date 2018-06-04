@@ -48,4 +48,11 @@ public class TweetService
     {
         tweetDbManager.delete(tweetID);
     }
+
+    public Collection<Tweet> searchTweet(String query) {
+        Collection<Tweet> tweets = new ArrayList<>();
+        tweetDbManager.search(query).forEach(x ->
+                tweets.add(x.Convert()));
+        return tweets;
+    }
 }

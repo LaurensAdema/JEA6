@@ -2,6 +2,7 @@ package ma.ade.kwetter2.database.objects;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 public class Tweet implements Serializable {
@@ -9,6 +10,7 @@ public class Tweet implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String message;
+    private Date date;
     
     @ManyToOne
     private User user;
@@ -16,10 +18,11 @@ public class Tweet implements Serializable {
     public Tweet() {
     }
 
-    public Tweet(String message, User user)
+    public Tweet(String message, User user, Date date)
     {
         this.message = message;
         this.user = user;
+        this.date = date;
     }
     
     public Tweet(ma.ade.kwetter2.domain.Tweet tweet)
@@ -27,6 +30,7 @@ public class Tweet implements Serializable {
         this.id = tweet.getId();
         this.message = tweet.getMessage();
         this.user = tweet.getUser().Convert();
+        this.date = tweet.getDate();
     }
     
     public Long getId()
@@ -58,7 +62,11 @@ public class Tweet implements Serializable {
     {
         this.user = user;
     }
-    
+
+    public Date getDate() { return date; }
+
+    public void setDate(Date date) { this.date = date; }
+
     public ma.ade.kwetter2.domain.Tweet Convert()
     {
         return new ma.ade.kwetter2.domain.Tweet(this);

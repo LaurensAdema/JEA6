@@ -1,0 +1,22 @@
+<!--Rotating card-->
+<div class="card-wrapper">
+  <div id="card-1" class="card-rotating effect__click">
+
+    <!--Front Side-->
+    <div class="face front">
+
+      <!--Avatar-->
+      <div class="avatar">
+        <img src="{{user.profile.pictureLocation}}" class="rounded-circle img-responsive" alt="{{user.profile.firstName}} {{user.profile.lastName}}">
+      </div>
+
+      <!--Content-->
+      <div class="card-body">
+        <h4 class="mt-1">{{user.profile.firstName}} {{user.profile.lastName}}</h4>
+        <p class="font-bold">{{ user.profile.bio }}</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--Rotating card-->

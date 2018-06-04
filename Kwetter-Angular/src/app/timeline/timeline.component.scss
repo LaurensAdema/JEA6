@@ -1,22 +1,3 @@
-.section img {
-  max-width: 100%;
-  height: auto;
-}
-.comments-list img, .reply-form img {
-  max-width: 100px;
-  border-radius: 50%;
-}
-.comments-list img, .img-fluid, .modal-dialog.cascading-modal.modal-avatar .modal-header, .reply-form img, .section-blog-fw .view img {
-  max-width: 100%;
-  height: auto;
-}
-.btn-floating:hover, .card-overlay, .card.card-cascade .view, .colorful-select .dropdown-content li a:hover, .colorful-select .dropdown-content li span:hover, .comments-list img, .modal-dialog.cascading-modal.modal-avatar .modal-header img, .reply-form img, .testimonial-carousel .testimonial .avatar img, .z-depth-2 {
-  box-shadow: 0 8px 17px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
-}
-img {
-  vertical-align: middle;
-  border-style: none;
-}
-*, ::after, ::before {
-  box-sizing: border-box;
+.timeline {
+  margin-top: 20px;
 }

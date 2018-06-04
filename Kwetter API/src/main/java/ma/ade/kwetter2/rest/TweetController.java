@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 @Stateless
@@ -22,15 +23,17 @@ public class TweetController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Tweet> GetTweets() {
-        return tweetService.getTweets();
+    public Response GetTweets() {
+        Collection<Tweet> tweets = tweetService.getTweets();
+        return Response.ok(tweets).build();
     }
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    public Tweet AddTweet(Tweet tweet){
+    public Response AddTweet(Tweet tweet){
         tweet.setUser(userService.getUser(1));
-        return tweetService.addTweet(tweet);
+        Tweet createdTweet = tweetService.addTweet(tweet);
+        return Response.ok(createdTweet).build();
     }
 
     @PATCH
@@ -46,8 +49,15 @@ public class TweetController {
 
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Tweet GetTweet(@PathParam("id") long id) {
+    public Response GetTweet(@PathParam("id") long id) {
         Tweet tweet = tweetService.getTweet(id);
-        return tweet;
+        return Response.ok(tweet).build();
+    }
+
+    @POST
+    @Path("/search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Tweet> SearchTweet(String query) {
+        return tweetService.searchTweet(query);
     }
 }

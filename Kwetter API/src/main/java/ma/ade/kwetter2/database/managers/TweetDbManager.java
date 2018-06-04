@@ -6,6 +6,7 @@ import ma.ade.kwetter2.database.objects.Tweet;
 import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Stateless
 public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbManager
@@ -27,5 +28,10 @@ public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbMana
     public Collection<Tweet> getAll()
     {
         return getEntityManager().createQuery("SELECT T FROM Tweet T").getResultList();
+    }
+
+    public Collection<Tweet> search(String query) {
+        List results = em.createQuery("SELECT t FROM Tweet t WHERE t.message LIKE :query").setParameter("query", query).getResultList();
+        return results;
     }
 }

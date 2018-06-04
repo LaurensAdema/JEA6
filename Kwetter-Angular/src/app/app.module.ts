@@ -5,8 +5,13 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { TimelineComponent } from './timeline/timeline.component';
-import { PostTweetComponent } from './post-tweet/post-tweet.component';
+import { PostTweetComponent } from './tweet/post-tweet/post-tweet.component';
 import { TweetComponent } from './tweet/tweet.component';
+import {HttpClientModule} from '@angular/common/http';
+import { MomentModule } from 'angular2-moment';
+import { SideProfileComponent } from './side-profile/side-profile.component';
+import { LoginComponent } from './header/login/login.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,11 +19,16 @@ import { TweetComponent } from './tweet/tweet.component';
     HeaderComponent,
     TimelineComponent,
     PostTweetComponent,
-    TweetComponent
+    TweetComponent,
+    SideProfileComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    HttpClientModule,
+    MomentModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

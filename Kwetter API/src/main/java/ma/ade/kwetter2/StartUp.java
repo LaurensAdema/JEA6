@@ -21,7 +21,7 @@ public class StartUp {
 
     @PostConstruct
     private void intData(){
-        User user1 = new User("laurens1@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg"));
+        User user1 = new User("laurens1@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "https://pbs.twimg.com/profile_images/906864070690820097/1-MOnAuY_400x400.jpg"));
         userService.addUser(user1);
         user1 = userService.getUserByEmail(user1.getEmail());
         userService.addUser(new User("laurens2@school.nl", "password", new Profile("Laurens", "Adema", "Ik ben Laurens", "Een stoel", "www.ade.ma", "www.ade.ma/plaatje.jpeg")));
