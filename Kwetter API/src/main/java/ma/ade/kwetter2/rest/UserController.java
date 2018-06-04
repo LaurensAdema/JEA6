@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 @Stateless
@@ -17,36 +18,49 @@ public class UserController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<User> GetUsers() {
-        return userService.getUsers();
+    public Response GetUsers() {
+        Collection<User> users = userService.getUsers();
+        if(users.isEmpty()){
+            return Response.noContent().build();
+        }
+        return Response.ok(users).build();
     }
     
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    public User AddUser(User user){
-        return userService.addUser(user);
+    public Response AddUser(User user){
+        User createdUser = userService.addUser(user);
+        return Response.ok(createdUser).build();
     }
 
     @PATCH
-    public void UpdateUser(User user)
+    public Response UpdateUser(User user)
     {
         userService.updateUser(user);
+        return Response.ok().build();
     }
 
     @DELETE
-    public void DeleteUser(long userID){
+    public Response DeleteUser(long userID){
         userService.removeUser(userID);
+        return Response.ok().build();
     }
 
     @GET
     @Path("/{input}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User GetUser(@PathParam("input") String input) {
+    public Response GetUser(@PathParam("input") String input) {
+        User foundUser;
         try {
             long id = Long.parseLong(input);
-            return userService.getUser(id);
+            foundUser = userService.getUser(id);
         } catch (Exception e) {
-            return userService.getUserByEmail(input);
+            foundUser = userService.getUserByEmail(input);
+        }
+        if(foundUser != null){
+            return Response.ok(foundUser).build();
+        } else {
+            return Response.noContent().build();
         }
     }
 }

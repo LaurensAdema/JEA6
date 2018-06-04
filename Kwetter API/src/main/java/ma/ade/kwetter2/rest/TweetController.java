@@ -25,6 +25,10 @@ public class TweetController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response GetTweets() {
         Collection<Tweet> tweets = tweetService.getTweets();
+        if(tweets.isEmpty())
+        {
+            return Response.noContent().build();
+        }
         return Response.ok(tweets).build();
     }
 
@@ -37,27 +41,38 @@ public class TweetController {
     }
 
     @PATCH
-    public void UpdateTweet(Tweet tweet)
+    public Response UpdateTweet(Tweet tweet)
     {
         tweetService.updateTweet(tweet);
+        return Response.ok().build();
     }
 
     @DELETE
-    public void DeleteTweet(long tweetID){
+    public Response DeleteTweet(long tweetID){
         tweetService.removeTweet(tweetID);
+        return Response.ok().build();
     }
 
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response GetTweet(@PathParam("id") long id) {
         Tweet tweet = tweetService.getTweet(id);
+        if(tweet == null)
+        {
+            return Response.noContent().build();
+        }
         return Response.ok(tweet).build();
     }
 
     @POST
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Tweet> SearchTweet(String query) {
-        return tweetService.searchTweet(query);
+    public Response SearchTweet(String query) {
+        Collection<Tweet> foundTweets = tweetService.searchTweet(query);
+        if(foundTweets.isEmpty())
+        {
+            return Response.noContent().build();
+        }
+        return Response.ok(foundTweets).build();
     }
 }
