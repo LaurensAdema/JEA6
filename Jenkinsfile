@@ -32,6 +32,7 @@ pipeline {
                 }
             }
             steps {
+                checkout scm
                 dir("Kwetter-Angular") {
                     sh 'docker build -t ma.ade/KwetterAngular:latest -t ma.ade/KwetterAngular:1.0 -f Dockerfile'
                 }
