@@ -1,7 +1,7 @@
 <section class="tweet">
   <div class="row">
     <div class="col-sm-2 col-12">
-      <img src="{{ tweet.user.profile.pictureLocation }}">
+      <img [routerLink]="['/user/' + tweet.user.id]" [src]="tweet.user.profile.pictureLocation" [alt]="tweet.user.profile.firstName + ' ' + tweet.user.profile.lastName">
     </div>
     <div class="col-sm-10 col-12">
       <a [routerLink]="['/user/' + tweet.user.id]"><h3 class="user-name">{{ tweet.user.profile.firstName }} {{ tweet.user.profile.lastName }}</h3></a>

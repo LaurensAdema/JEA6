@@ -2,7 +2,7 @@
 <div class="card card-personal">
 
   <!-- Card image-->
-  <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(29).jpg" [src]="user.profile.pictureLocation" [alt]="user.profile.firstName + ' ' + user.profile.lastName">
+  <img [routerLink]="['/user/' + user.id]" class="card-img-top" [src]="user.profile.pictureLocation" [alt]="user.profile.firstName + ' ' + user.profile.lastName">
   <!-- Card image-->
 
   <!-- Card content -->
