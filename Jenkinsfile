@@ -27,7 +27,7 @@ pipeline {
         stage('Build image | Angular') {
             steps {
                 dir("Kwetter-Angular") {
-                    sh 'docker.build("KwetterAngular:${env.BUILD_ID}", "-f Dockerfile /")'
+                    sh 'docker build -t ma.ade/KwetterAngular:latest -t ma.ade/KwetterAngular:1.0 -f Dockerfile'
                 }
             }
         }
@@ -90,7 +90,7 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter.angular'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/start'
                 }
             }
@@ -103,7 +103,7 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter.angular'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/start'
                 }
             }
