@@ -25,16 +25,10 @@ pipeline {
             }
         }
         stage('Build image | Angular') {
-            agent {
-                docker {
-                    image '18.03.1-ce-dind'
-                    args '-v /run/docker.sock:/var/run/docker.sock'
-                }
-            }
+            agent none
             steps {
-                dir("Kwetter-Angular") {
-                    sh 'docker build -t ma.ade/KwetterAngular:latest -t ma.ade/KwetterAngular:1.0 -f Dockerfile'
-                }
+                sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest'
             }
         }
         stage('Unittests & Sonarqube | API') {
@@ -66,6 +60,7 @@ pipeline {
             when {
                 branch 'dev'
             }
+            agent none
             steps {
                 dir("Kwetter API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/stop'
@@ -79,6 +74,7 @@ pipeline {
             when {
                 branch 'master'
             }
+            agent none
             steps {
                 dir("Kwetter API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
@@ -92,11 +88,12 @@ pipeline {
             when {
                 branch 'dev'
             }
+            agent none
             steps {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter.angular'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/start'
                 }
             }
@@ -105,11 +102,12 @@ pipeline {
             when {
                 branch 'master'
             }
+            agent none
             steps {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/KwetterAngular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter.angular'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/start'
                 }
             }
