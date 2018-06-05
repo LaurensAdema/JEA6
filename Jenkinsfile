@@ -27,7 +27,7 @@ pipeline {
         stage('Build image | Angular') {
             steps {
                 dir("Kwetter-Angular") {
-                    def customImage = docker.build("KwetterAngular:${env.BUILD_ID}", "-f Dockerfile /")
+                    sh 'docker.build("KwetterAngular:${env.BUILD_ID}", "-f Dockerfile /")'
                 }
             }
         }
