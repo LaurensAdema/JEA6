@@ -4,7 +4,7 @@ import {AuthenticationService} from '../api/authentication.service';
 import {UserService} from '../api/user.service';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {Login} from '../domain/login';
-import {ModalDirective} from 'angular-bootstrap-md/modals/modal.directive';
+import {ModalDirective} from 'angular-bootstrap-md';
 
 @Component({
   selector: 'app-header',

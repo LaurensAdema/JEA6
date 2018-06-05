@@ -9,6 +9,6 @@ import {AuthenticationService} from './api/authentication.service';
   styleUrls: ['./app.component.scss'],
   providers: [AuthenticationService, UserService, JwtHelperService]
 })
-export class AppComponent {
+export class AppComponent {}
 
-}
+

@@ -27,7 +27,7 @@ pipeline {
         stage('Build image | Angular') {
             agent {
                 docker {
-                    image 'docker:17.12-dind'
+                    image '18.03.1-ce-dind'
                     args '-v /run/docker.sock:/var/run/docker.sock'
                 }
             }
