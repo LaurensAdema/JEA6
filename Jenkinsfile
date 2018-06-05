@@ -36,7 +36,6 @@ pipeline {
         stage('Build | Angular') {
             steps {
                 dir("Kwetter-Angular") {
-                    milestone()
                     sh 'ng build --prod --aot --sm --progress=false'
                 }
             }
