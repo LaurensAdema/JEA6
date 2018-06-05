@@ -2,7 +2,7 @@ package ma.ade.kwetter2.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @XmlRootElement
 public class Tweet implements Serializable
@@ -10,7 +10,7 @@ public class Tweet implements Serializable
     private Long id;
     private String message;
     private User user;
-    private Date date;
+    private OffsetDateTime date;
 
     public Long getId()
     {
@@ -42,14 +42,14 @@ public class Tweet implements Serializable
         this.user = user;
     }
 
-    public Date getDate() { return date; }
+    public OffsetDateTime getDate() { return date; }
 
-    public void setDate(Date date) { this.date = date; }
+    public void setDate(OffsetDateTime date) { this.date = date; }
 
     public Tweet() {
     }
 
-    public Tweet(Long id, String message, User user, Date date)
+    public Tweet(Long id, String message, User user, OffsetDateTime date)
     {
         this.id = id;
         this.message = message;
@@ -61,7 +61,7 @@ public class Tweet implements Serializable
     {
         this.message = message;
         this.user = user;
-        this.date = new Date();
+        this.date = OffsetDateTime.now();
     }
     
     public Tweet(ma.ade.kwetter2.database.objects.Tweet tweet)

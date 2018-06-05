@@ -9,8 +9,12 @@ export class TweetService {
 
   constructor(private http: HttpClient) {}
 
-  getTweets() {
+  getAllTweets() {
     return this.http.get<Tweet[]>(`${environment.api}/tweet`);
+  }
+
+  getMyTweets() {
+    return this.http.get<Tweet[]>(`${environment.api}/tweet/me`);
   }
 
   postTweet(tweet) {

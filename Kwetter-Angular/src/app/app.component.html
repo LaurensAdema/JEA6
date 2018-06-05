@@ -1,14 +1,14 @@
-<app-header [user]="user"></app-header>
+<app-header></app-header>
 <main>
   <div class="main-wrapper">
     <div class="text-center container">
       <div class="row">
         <div class="col-md-3">
-          <app-side-profile [user]="user" *ngIf="user"></app-side-profile>
+          <app-side-profile *ngIf="user"></app-side-profile>
         </div>
         <div class="col-md-9">
-          <app-post-tweet [user]="user"></app-post-tweet>
-          <app-timeline [user]="user"></app-timeline>
+          <app-post-tweet></app-post-tweet>
+          <app-timeline></app-timeline>
         </div>
       </div>
     </div>

@@ -12,6 +12,11 @@ import { MomentModule } from 'angular2-moment';
 import { SideProfileComponent } from './side-profile/side-profile.component';
 import { LoginComponent } from './header/login/login.component';
 import {FormsModule} from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
@@ -28,7 +33,14 @@ import {FormsModule} from '@angular/forms';
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     MomentModule,
-    FormsModule
+    FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:8080/api/'],
+        blacklistedRoutes: ['localhost:8080/api/auth/']
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],

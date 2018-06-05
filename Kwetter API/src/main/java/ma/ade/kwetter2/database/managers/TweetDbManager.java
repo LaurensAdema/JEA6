@@ -31,7 +31,7 @@ public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbMana
     }
 
     public Collection<Tweet> search(String query) {
-        List results = em.createQuery("SELECT t FROM Tweet t WHERE t.message LIKE :query").setParameter("query", query).getResultList();
+        List results = em.createQuery("SELECT t FROM Tweet t WHERE lower(t.message) LIKE concat('%', lower(:query), '%') ").setParameter("query", query).getResultList();
         return results;
     }
 }

@@ -1,8 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Tweet} from '../../domain/tweet';
 import {TweetService} from '../../api/tweet.service';
-import {User} from '../../domain/user';
-import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-post-tweet',
@@ -11,7 +9,6 @@ import {Observable} from 'rxjs';
   providers: [TweetService]
 })
 export class PostTweetComponent implements OnInit {
-  @Input() user: User;
   model: Tweet;
 
   constructor(private tweetService: TweetService) {
@@ -23,11 +20,10 @@ export class PostTweetComponent implements OnInit {
 
   onSubmit() {
     this.model.date = new Date();
-    this.model.user = this.user;
-    console.log(JSON.stringify(this.model));
     this.tweetService.postTweet(this.model).subscribe(
       response => {
-        console.log(response);
+        this.model = null;
+        return true;
       }
     );
   }

@@ -12,6 +12,7 @@ export class TweetComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    window['test'] = this.tweet.date;
   }
 
 }

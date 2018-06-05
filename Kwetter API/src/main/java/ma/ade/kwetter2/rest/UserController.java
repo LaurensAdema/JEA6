@@ -2,6 +2,7 @@ package ma.ade.kwetter2.rest;
 
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.UserService;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ public class UserController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Response AddUser(User user){
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         User createdUser = userService.addUser(user);
         return Response.ok(createdUser).build();
     }
@@ -36,6 +38,9 @@ public class UserController {
     @PATCH
     public Response UpdateUser(User user)
     {
+        if(user.getPassword() != null && !user.getPassword().isEmpty()){
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+        }
         userService.updateUser(user);
         return Response.ok().build();
     }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {UserService} from './api/user.service';
 import {User} from './domain/user';
 
@@ -8,19 +8,6 @@ import {User} from './domain/user';
   styleUrls: ['./app.component.scss'],
   providers: [UserService]
 })
-export class AppComponent implements OnInit {
-  @Input() user: User;
-
+export class AppComponent {
   constructor(private userService: UserService) { }
-
-  ngOnInit() {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      this.userService.getUser(1).subscribe(
-        user => {
-          this.user = user;
-        }
-      );
-    }
-  }
 }

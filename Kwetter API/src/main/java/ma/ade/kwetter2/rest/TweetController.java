@@ -67,6 +67,7 @@ public class TweetController {
     @POST
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response SearchTweet(String query) {
         Collection<Tweet> foundTweets = tweetService.searchTweet(query);
         if(foundTweets.isEmpty())

@@ -10,7 +10,6 @@ import {User} from '../domain/user';
   providers: [TweetService]
 })
 export class TimelineComponent implements OnInit, OnDestroy {
-  @Input() user: User;
   tweets: Tweet[] = [];
   ids = [];
   timer;
@@ -30,7 +29,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   getTweets() {
-    this.tweetService.getTweets().subscribe(tweets => {
+    this.tweetService.getAllTweets().subscribe(tweets => {
       tweets.forEach(tweet => {
         if (this.ids.indexOf(tweet.id) < 0) {
           this.ids.push(tweet.id);
