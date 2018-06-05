@@ -65,7 +65,7 @@ pipeline {
                 dir("Kwetter API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/start'
                 }
             }
@@ -79,7 +79,7 @@ pipeline {
                 dir("Kwetter API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
                 }
             }
@@ -93,7 +93,7 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter.angular/start'
                 }
             }
@@ -107,7 +107,7 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter.angular'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter.angular'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter.angular/start'
                 }
             }
