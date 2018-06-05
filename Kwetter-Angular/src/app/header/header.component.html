@@ -1,5 +1,5 @@
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo mb-4">
-  <logo><a class="navbar-brand" href="#">Kwetter</a></logo>
+  <logo><a class="navbar-brand" [routerLink]="['']">Kwetter</a></logo>
   <links>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
@@ -26,11 +26,9 @@
           <img src="{{ user.profile.pictureLocation }}" class="img-fluid rounded-circle z-depth-0"><span class="caret"></span>
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-menu-right dropdown-secondary" role="menu">
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Action</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Another action</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Something else here</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['/user/' + user.id]">Profile</a>
           <div class="divider dropdown-divider"></div>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#" (click)="logout()">Log out</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['']" (click)="logout()">Log out</a>
         </div>
       </li>
     </ul>
