@@ -55,4 +55,11 @@ public class TweetService
                 tweets.add(x.Convert()));
         return tweets;
     }
+
+    public Collection<Tweet> getTweetsOf(long id) {
+        Collection<Tweet> tweets = new ArrayList<>();
+        tweetDbManager.getTweetsOf(id).forEach(x ->
+                tweets.add(x.Convert()));
+        return tweets;
+    }
 }

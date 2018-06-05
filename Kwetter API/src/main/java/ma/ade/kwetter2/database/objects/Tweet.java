@@ -6,6 +6,10 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name="tweet.getTweetsOf", query="SELECT T FROM Tweet T WHERE T.user.id = :id"),
+        @NamedQuery(name="tweet.search", query="SELECT t FROM Tweet t WHERE lower(t.message) LIKE concat('%', lower(:query), '%') ")
+})
 public class Tweet implements Serializable {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

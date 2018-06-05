@@ -12,8 +12,16 @@ export class TweetService {
     return this.http.get<Tweet[]>(`${environment.api}/tweet`);
   }
 
+  getTweetsForMe() {
+    return this.http.get<Tweet[]>(`${environment.api}/tweets/me`);
+  }
+
   getMyTweets() {
-    return this.http.get<Tweet[]>(`${environment.api}/tweet/me`);
+    return this.http.get<Tweet[]>(`${environment.api}/user/me/tweets`);
+  }
+
+  getTweetsOf(id) {
+    return this.http.get<Tweet[]>(`${environment.api}/user/${id}/tweets`);
   }
 
   postTweet(tweet) {

@@ -15,4 +15,8 @@ export class UserService {
   getLoggedInUser() {
     return this.http.get<User>(`${environment.api}/user/me`);
   }
+
+  getAllUsers() {
+    return this.http.get<User[]>(`${environment.api}/user`);
+  }
 }

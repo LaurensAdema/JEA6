@@ -25,13 +25,23 @@ public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbMana
         return em;
     }
 
+    @Override
     public Collection<Tweet> getAll()
     {
         return getEntityManager().createQuery("SELECT T FROM Tweet T").getResultList();
     }
 
+    @Override
     public Collection<Tweet> search(String query) {
-        List results = em.createQuery("SELECT t FROM Tweet t WHERE lower(t.message) LIKE concat('%', lower(:query), '%') ").setParameter("query", query).getResultList();
-        return results;
+        TypedQuery<Tweet> typedQuery = em.createNamedQuery("tweet.search", Tweet.class);
+        typedQuery.setParameter("query", query);
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public Collection<Tweet> getTweetsOf(long id) {
+        TypedQuery<Tweet> query = em.createNamedQuery("tweet.getTweetsOf", Tweet.class);
+        query.setParameter("id", id);
+        return query.getResultList();
     }
 }

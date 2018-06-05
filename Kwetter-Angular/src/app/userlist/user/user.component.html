@@ -1,0 +1,21 @@
+<!-- Card -->
+<div class="card card-personal">
+
+  <!-- Card image-->
+  <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(29).jpg" [src]="user.profile.pictureLocation" [alt]="user.profile.firstName + ' ' + user.profile.lastName">
+  <!-- Card image-->
+
+  <!-- Card content -->
+  <div class="card-body">
+    <!-- Title-->
+    <a [routerLink]="[user.id]"><h4 class="card-title title-one">{{ user.profile.firstName }} {{ user.profile.lastName }}</h4></a>
+    <p class="card-meta">{{ user.profile.location }}</p>
+    <!-- Text -->
+    <p class="card-text">{{ user.profile.bio }}</p>
+    <hr>
+    <a class="card-meta"><span><i class="fa fa-user"></i> 0 Followers</span></a>
+  </div>
+  <!-- Card content -->
+
+</div>
+<!-- Card -->

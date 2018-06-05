@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {User} from '../domain/user';
-import {UserService} from '../api/user.service';
 import {AuthenticationService} from '../api/authentication.service';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import {UserService} from '../api/user.service';
 
 @Component({
-  selector: 'app-side-profile',
-  templateUrl: './side-profile.component.html',
-  styleUrls: ['./side-profile.component.scss']
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
-export class SideProfileComponent implements OnInit {
+export class HomeComponent implements OnInit {
   user: User;
 
   constructor(private authService: AuthenticationService, private userService: UserService, private jwtService: JwtHelperService) { }
@@ -30,4 +30,5 @@ export class SideProfileComponent implements OnInit {
       this.user = null;
     }
   }
+
 }

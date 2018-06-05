@@ -19,7 +19,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getTweets();
-    this.timer = setInterval(() => this.getTweets(), 61000);
+    this.timer = setInterval(() => this.getTweets(), 1000);
   }
 
   ngOnDestroy() {

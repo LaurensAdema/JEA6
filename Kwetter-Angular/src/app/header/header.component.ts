@@ -14,6 +14,7 @@ import {ModalDirective} from 'angular-bootstrap-md/modals/modal.directive';
 export class HeaderComponent implements OnInit {
   user: User;
   login: Login;
+  search: string;
   @ViewChild('loginModal')
   loginModal: ModalDirective;
 
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.login = new Login();
+    this.search = '';
     this.loadUser();
     this.authService.loginEvent$.subscribe(() => this.loadUser());
   }
@@ -47,5 +49,9 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logout();
     return false;
+  }
+
+  doSearch() {
+
   }
 }

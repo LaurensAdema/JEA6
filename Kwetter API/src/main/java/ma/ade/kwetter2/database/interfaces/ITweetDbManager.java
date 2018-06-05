@@ -17,4 +17,5 @@ import java.util.Collection;
 public interface ITweetDbManager extends IBaseDbManager<Tweet>
 {
     Collection<Tweet> search(String query);
+    Collection<Tweet> getTweetsOf(long id);
 }

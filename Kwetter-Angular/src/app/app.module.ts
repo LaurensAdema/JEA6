@@ -9,10 +9,14 @@ import { PostTweetComponent } from './tweet/post-tweet/post-tweet.component';
 import { TweetComponent } from './tweet/tweet.component';
 import {HttpClientModule} from '@angular/common/http';
 import { MomentModule } from 'angular2-moment';
-import { SideProfileComponent } from './side-profile/side-profile.component';
 import {FormsModule} from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import {environment} from '../environments/environment';
+import { UserlistComponent } from './userlist/userlist.component';
+import { UserComponent } from './userlist/user/user.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -25,7 +29,10 @@ export function tokenGetter() {
     TimelineComponent,
     PostTweetComponent,
     TweetComponent,
-    SideProfileComponent
+    UserlistComponent,
+    UserComponent,
+    HomeComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +46,8 @@ export function tokenGetter() {
         whitelistedDomains: ['localhost:8080'],
         blacklistedRoutes: [`${environment.api}/auth/`]
       }
-    })
+    }),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent],

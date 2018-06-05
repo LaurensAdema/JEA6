@@ -19,12 +19,14 @@ export class PostTweetComponent implements OnInit {
   }
 
   onSubmit() {
-    this.model.date = new Date();
-    this.tweetService.postTweet(this.model).subscribe(
-      response => {
-        this.model  = new Tweet();
-        return true;
-      }
-    );
+    if (this.model.message) {
+      this.model.date = new Date();
+      this.tweetService.postTweet(this.model).subscribe(
+        response => {
+          this.model = new Tweet();
+          return true;
+        }
+      );
+    }
   }
 }

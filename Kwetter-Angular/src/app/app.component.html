@@ -2,15 +2,7 @@
 <main>
   <div class="main-wrapper">
     <div class="text-center container">
-      <div class="row">
-        <div class="col-md-3" *ngIf="user">
-          <app-side-profile ></app-side-profile>
-        </div>
-        <div class="col-md-9">
-          <app-post-tweet *ngIf="user"></app-post-tweet>
-          <app-timeline></app-timeline>
-        </div>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </main>

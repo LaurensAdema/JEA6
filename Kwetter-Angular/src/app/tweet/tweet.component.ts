@@ -6,13 +6,8 @@ import {Tweet} from '../domain/tweet';
   templateUrl: './tweet.component.html',
   styleUrls: ['./tweet.component.scss']
 })
-export class TweetComponent implements OnInit {
+export class TweetComponent {
   @Input() tweet: Tweet;
 
   constructor() { }
-
-  ngOnInit() {
-    window['test'] = this.tweet.date;
-  }
-
 }
