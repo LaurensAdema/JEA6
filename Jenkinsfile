@@ -24,36 +24,10 @@ pipeline {
                 }
             }
         }
-        stage('NPM Install | Angular') {
+        stage('Build image | Angular') {
             steps {
                 dir("Kwetter-Angular") {
-                    withEnv(["NPM_CONFIG_LOGLEVEL=warn"]) {
-                        sh 'npm install'
-                    }
-                }
-            }
-        }
-        stage('Build | Angular') {
-            steps {
-                dir("Kwetter-Angular") {
-                    sh 'ng build --prod --aot --sm --progress=false'
-                }
-            }
-        }
-        stage('Test | Angular') {
-            steps {
-                dir("Kwetter-Angular") {
-                    withEnv(["CHROME_BIN=/usr/bin/chromium-browser"]) {
-                    sh 'ng test --progress=false --watch false'
-                    junit '**/test-results.xml'
-                }
-              }
-            }
-        }
-        stage('Lint | Angular') {
-            steps {
-                dir("Kwetter-Angular") {
-                    sh 'ng lint'
+                    def customImage = docker.build("KwetterAngular:${env.BUILD_ID}", "-f Dockerfile /")
                 }
             }
         }
