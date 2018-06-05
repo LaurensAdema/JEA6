@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 import javax.annotation.Priority;
-import javax.crypto.KeyGenerator;
 import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -25,7 +24,7 @@ public class SecuredFilter implements ContainerRequestFilter{
     public static final String AUTHENTICATION_SCHEME = "Bearer";
 
     @Inject
-    private KeyGenerator keyGenerator;
+    private KeyGen keyGenerator;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -33,13 +32,18 @@ public class SecuredFilter implements ContainerRequestFilter{
         // Get the HTTP Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
+        if(authorizationHeader == null || authorizationHeader.isEmpty()){
+            unauthorized(requestContext);
+            return;
+        }
+
         // Extract the token from the HTTP Authorization header
         String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
 
         try {
 
             // Validate the token
-            Key key = keyGenerator.generateKey();
+            Key key = keyGenerator.generate();
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 
             String username = claimsJws.getBody().getSubject();
@@ -67,8 +71,20 @@ public class SecuredFilter implements ContainerRequestFilter{
             });
 
         } catch (Exception e) {
-            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+            forbidden(requestContext);
         }
+    }
+
+    private void unauthorized(ContainerRequestContext requestContext) {
+        abortWith(requestContext, Response.Status.UNAUTHORIZED);
+    }
+
+    private void forbidden(ContainerRequestContext requestContext){
+        abortWith(requestContext, Response.Status.FORBIDDEN);
+    }
+
+    private void abortWith(ContainerRequestContext requestContext, Response.Status status){
+        requestContext.abortWith(Response.status(status).build());
     }
 }
 

@@ -69,7 +69,15 @@ public class User implements Serializable {
     {
         this.profile = profile;
     }
-    
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
     public ma.ade.kwetter2.domain.User Convert()
     {
         return new ma.ade.kwetter2.domain.User(this);

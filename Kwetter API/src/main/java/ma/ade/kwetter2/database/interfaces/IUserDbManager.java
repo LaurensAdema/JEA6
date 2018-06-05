@@ -14,4 +14,6 @@ import ma.ade.kwetter2.database.objects.User;
 public interface IUserDbManager extends IBaseDbManager<User>
 {
     User getByEmail(String email);
+
+    boolean authenticateUser(long userID, String password);
 }

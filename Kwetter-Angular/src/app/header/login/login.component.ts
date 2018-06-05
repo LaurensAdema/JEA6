@@ -15,9 +15,12 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthenticationService, private userService: UserService) { }
 
   ngOnInit() {
+    this.user = new User();
     this.userService.getLoggedInUser().subscribe(
       user => {
-        this.user = user;
+        if (user != null) {
+          this.user = user;
+        }
       }
     );
   }
@@ -25,7 +28,7 @@ export class LoginComponent implements OnInit {
   doLogin() {
     this.authService.login(this.user.email, this.user.password)
       .subscribe(resp => {
-        localStorage.setItem('access_token', resp);
+        localStorage.setItem('access_token', resp.accessToken);
       });
   }
 }

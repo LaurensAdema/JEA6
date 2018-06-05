@@ -8,6 +8,16 @@ import {User} from './domain/user';
   styleUrls: ['./app.component.scss'],
   providers: [UserService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+  user: User;
+
   constructor(private userService: UserService) { }
+
+  ngOnInit(): void {
+    this.userService.getLoggedInUser().subscribe(
+      user => {
+        this.user = user;
+      }
+    );
+  }
 }

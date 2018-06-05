@@ -1,8 +1,11 @@
 package ma.ade.kwetter2.rest;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ma.ade.kwetter2.authentication.KeyGen;
+import ma.ade.kwetter2.domain.Token;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,7 +22,7 @@ import java.util.Date;
 
 @Stateless
 @Path("/auth")
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
     @Inject
     private UserService userService;
     @Inject
@@ -28,19 +31,24 @@ public class AuthenticationController {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response login(String email, String password){
+    public Response login(String json){
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObj = parser.parse(json).getAsJsonObject();
+
+        String email = jsonObj.get("email").getAsString();
+        String password = jsonObj.get("password").getAsString();
+
         User user = userService.getUserByEmail(email);
         if(user == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return notFound();
         }
 
-        if(BCrypt.checkpw(password, user.getPassword())){
-            String token = issueToken(user.getEmail());
-            return Response.ok(token).build();
+        if(userService.authenticateUser(user.getId(), password)){
+            Token token = new Token(issueToken(user.getEmail()));
+            return ok(token);
         }
         else{
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return forbidden();
         }
     }
 

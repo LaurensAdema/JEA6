@@ -2,6 +2,7 @@ package ma.ade.kwetter2.service;
 
 import ma.ade.kwetter2.database.interfaces.IUserDbManager;
 import ma.ade.kwetter2.domain.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -41,12 +42,16 @@ public class UserService
 
     public User addUser(User user)
     {
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         return userDbManager.create(user.Convert()).Convert();
     }
 
     public void updateUser(User user)
     {
         ma.ade.kwetter2.database.objects.User databaseUser = userDbManager.get(user.getId());
+        if(user.getPassword() != null && !user.getPassword().isEmpty()){
+            databaseUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+        }
         databaseUser.setEmail(user.getEmail());
         databaseUser.setProfile(user.getProfile().Convert());
         userDbManager.update(databaseUser);
@@ -55,5 +60,9 @@ public class UserService
     public void removeUser(long userID)
     {
         userDbManager.delete(userID);
+    }
+
+    public boolean authenticateUser(long userID, String password) {
+        return userDbManager.authenticateUser(userID, password);
     }
 }

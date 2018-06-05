@@ -22,7 +22,7 @@ export class PostTweetComponent implements OnInit {
     this.model.date = new Date();
     this.tweetService.postTweet(this.model).subscribe(
       response => {
-        this.model = null;
+        this.model  = new Tweet();
         return true;
       }
     );

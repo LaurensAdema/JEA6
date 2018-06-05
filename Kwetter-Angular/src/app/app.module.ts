@@ -13,6 +13,7 @@ import { SideProfileComponent } from './side-profile/side-profile.component';
 import { LoginComponent } from './header/login/login.component';
 import {FormsModule} from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import {environment} from '../environments/environment';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -31,14 +32,14 @@ export function tokenGetter() {
   imports: [
     BrowserModule,
     MDBBootstrapModule.forRoot(),
-    HttpClientModule,
     MomentModule,
     FormsModule,
+    HttpClientModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ['localhost:8080/api/'],
-        blacklistedRoutes: ['localhost:8080/api/auth/']
+        whitelistedDomains: ['localhost:8080'],
+        blacklistedRoutes: [`${environment.api}/auth/`]
       }
     })
   ],

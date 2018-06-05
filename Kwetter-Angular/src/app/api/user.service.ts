@@ -13,7 +13,6 @@ export class UserService {
   }
 
   getLoggedInUser() {
-    const userId = localStorage.get('userId');
-    return this.http.get<User>(`${environment.api}/user/${userId}`);
+    return this.http.get<User>(`${environment.api}/user/me`);
   }
 }
