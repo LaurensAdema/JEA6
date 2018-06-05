@@ -4,7 +4,7 @@
               (keydown.enter)="$event.preventDefault();onSubmit();"
               maxlength="140" required id="tweet" [(ngModel)]="model.message" name="tweet" #tweet="ngModel">
     </textarea>
-    <label for="form-mess" [ngClass]="{'active':focused}">What are you thinking about?</label>
+    <label for="form-mess">What are you thinking about?</label>
     <button type="submit" class="btn btn-primary waves-effect waves-light float-right" [disabled]="!postTweetForm.form.valid">Tweet</button>
   </form>
 </section>
