@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Build | API') {
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     sh 'mvn -B -DskipTests clean package'
                     archiveArtifacts artifacts: 'target/', fingerprint: true
                 }
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Build image | API') {
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     sh 'mvn clean package docker:build -DskipTests'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Unittests & Sonarqube | API') {
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'SonarSettings')]) {
                         sh 'mvn -s $SonarSettings clean package sonar:sonar -B'
                     }
@@ -42,14 +42,14 @@ pipeline {
         }
         stage('Integration tests | API') {
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     sh 'mvn clean verify'
                 }
             }
         }
         stage('Artifactory | API') {
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                      configFileProvider([configFile(fileId: 'b7d2e7fe-2005-44f6-bde2-77587a78c6a2', variable: 'ArtifactorySettings')]) {
                          sh 'mvn -s $ArtifactorySettings clean package deploy -DskipTests -B'
                      }
@@ -62,7 +62,7 @@ pipeline {
             }
             agent none
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter'
                     sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
@@ -76,7 +76,7 @@ pipeline {
             }
             agent none
             steps {
-                dir("Kwetter API") {
+                dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
                     sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
