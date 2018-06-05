@@ -10,7 +10,6 @@ import { TweetComponent } from './tweet/tweet.component';
 import {HttpClientModule} from '@angular/common/http';
 import { MomentModule } from 'angular2-moment';
 import { SideProfileComponent } from './side-profile/side-profile.component';
-import { LoginComponent } from './header/login/login.component';
 import {FormsModule} from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import {environment} from '../environments/environment';
@@ -26,8 +25,7 @@ export function tokenGetter() {
     TimelineComponent,
     PostTweetComponent,
     TweetComponent,
-    SideProfileComponent,
-    LoginComponent
+    SideProfileComponent
   ],
   imports: [
     BrowserModule,

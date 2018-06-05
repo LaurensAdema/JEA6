@@ -1,29 +1,51 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {User} from '../domain/user';
-import {TweetService} from '../api/tweet.service';
 import {AuthenticationService} from '../api/authentication.service';
 import {UserService} from '../api/user.service';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {Login} from '../domain/login';
+import {ModalDirective} from 'angular-bootstrap-md/modals/modal.directive';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  providers: [AuthenticationService, UserService]
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   user: User;
+  login: Login;
+  @ViewChild('loginModal')
+  loginModal: ModalDirective;
 
-  constructor(private authService: AuthenticationService, private userService: UserService) { }
+  constructor(private authService: AuthenticationService, private userService: UserService, private jwtService: JwtHelperService) { }
 
-  ngOnInit() {
-    this.userService.getLoggedInUser().subscribe(
-      user => {
-        this.user = user;
-      }
-    );
+  ngOnInit(): void {
+    this.login = new Login();
+    this.loadUser();
+    this.authService.loginEvent$.subscribe(() => this.loadUser());
+  }
+
+  loadUser() {
+    if (!this.jwtService.isTokenExpired()) {
+      this.userService.getLoggedInUser().subscribe(
+        user => {
+          this.user = user;
+        }
+      );
+    } else {
+      this.user = null;
+    }
+  }
+
+  doLogin() {
+    this.authService.login(this.login.email, this.login.password)
+      .subscribe(resp => {
+        this.loginModal.hide();
+      });
   }
 
   logout() {
-    localStorage.setItem('userId', '');
+    this.authService.logout();
+    return false;
   }
 }
