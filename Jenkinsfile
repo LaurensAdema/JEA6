@@ -25,6 +25,12 @@ pipeline {
             }
         }
         stage('Build image | Angular') {
+            agent {
+                docker {
+                    image 'docker:17.12-dind'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 dir("Kwetter-Angular") {
                     sh 'docker build -t ma.ade/KwetterAngular:latest -t ma.ade/KwetterAngular:1.0 -f Dockerfile'
