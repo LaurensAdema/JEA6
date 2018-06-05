@@ -28,11 +28,10 @@ pipeline {
             agent {
                 docker {
                     image 'docker:17.12-dind'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
-                checkout scm
                 dir("Kwetter-Angular") {
                     sh 'docker build -t ma.ade/KwetterAngular:latest -t ma.ade/KwetterAngular:1.0 -f Dockerfile'
                 }
