@@ -24,9 +24,11 @@ pipeline {
                 }
             }
         }
-        stage('Build image | Angular | Dev') {
-			when {
-                branch 'dev'
+        stage('Build image | Angular | Staging') {
+            when {
+                not {
+                    branch 'master'
+                }
             }
             agent none
             steps {
@@ -34,7 +36,7 @@ pipeline {
                 sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" "http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest-staging&buildargs=%7B%22ENVIRN%22%3A%22staging%22%7D"'
             }
         }
-		stage('Build image | Angular | Master') {
+		stage('Build image | Angular | Production') {
 			when {
                 branch 'master'
             }
@@ -69,21 +71,23 @@ pipeline {
                 }
             }
         }
-        stage('Deploy | API | Dev') {
+        stage('Deploy | API | Staging') {
             when {
-                branch 'dev'
+                not {
+                    branch 'master'
+                }
             }
             agent none
             steps {
                 dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.dev.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/api.dev.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest-staging","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "59388" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "59388" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.dev.kwetter/start'
                 }
             }
         }
-        stage('Deploy | API | Master') {
+        stage('Deploy | API | Production') {
             when {
                 branch 'master'
             }
@@ -92,26 +96,28 @@ pipeline {
                 dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/api.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest-production","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "5938" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "5938" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
 					sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.kwetter/start'
                 }
             }
         }
-        stage('Deploy | Angular | Dev') {
+        stage('Deploy | Angular | Staging') {
             when {
-                branch 'dev'
+                not {
+                    branch 'master'
+                }
             }
             agent none
             steps {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4201" }] }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest-staging","ExposedPorts": {"4200/tcp": { "HostPort": "4201" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4201" }] }}}\' http://192.168.1.11:2375/containers/create?name=dev.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/start'
                 }
             }
         }
-        stage('Deploy | Angular | Master') {
+        stage('Deploy | Angular | Production') {
             when {
                 branch 'master'
             }
@@ -120,8 +126,14 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4200" }] }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
-                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
+             201    def response = sh returnStdout: true, script: 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest-production","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4200" }] }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
+             204    def response = sh returnStdout: true, script: 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
+
+                    Pattern pattern = Pattern.compile("(\\d{3})");
+                    Matcher matcher = pattern.matcher(s);
+                    if (matcher.find()) {
+                      matcher.group(1);
+                    }
                 }
             }
         }
