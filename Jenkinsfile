@@ -31,7 +31,7 @@ pipeline {
             agent none
             steps {
                 sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
-                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular","ENVIRN":"stage"}'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular"}&buildargs={"ENVIRN":"stage"}'
             }
         }
 		stage('Build image | Angular | Master') {
@@ -41,7 +41,7 @@ pipeline {
             agent none
             steps {
                 sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
-                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular","ENVIRN":"prod"}'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular"}&buildargs={"ENVIRN":"prod"}'
             }
         }
         stage('Unittests & Sonarqube | API') {
