@@ -4,7 +4,6 @@
 FROM node:10.3.0-alpine as builder
 
 ## Used for the new Angular CLI Workspaces
-ARG NG_PROJECT_NAME
 
 COPY package.json .
 
@@ -20,13 +19,12 @@ COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
 
-RUN npm run ng build $NG_PROJECT_NAME -- --stage
+RUN npm run ng build Kwetter-Angular -- --stage
 
 
 ### STAGE 2: Setup ###
 
 FROM nginx:1.15.0-alpine
-ARG NG_PROJECT_NAME
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
 
@@ -34,7 +32,7 @@ COPY nginx/default.conf /etc/nginx/conf.d/
 RUN rm -rf /usr/share/nginx/html/*
 
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /ng-app/dist/$NG_PROJECT_NAME /usr/share/nginx/html
+COPY --from=builder /ng-app/dist/Kwetter-Angular /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
 
