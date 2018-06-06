@@ -126,14 +126,8 @@ pipeline {
                 dir("Kwetter-Angular") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
-             201    def response = sh returnStdout: true, script: 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest-production","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4200" }] }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
-             204    def response = sh returnStdout: true, script: 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
-
-                    Pattern pattern = Pattern.compile("(\\d{3})");
-                    Matcher matcher = pattern.matcher(s);
-                    if (matcher.find()) {
-                      matcher.group(1);
-                    }
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest-production","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4200" }] }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
+                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
                 }
             }
         }
