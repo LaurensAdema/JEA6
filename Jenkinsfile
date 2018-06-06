@@ -24,11 +24,24 @@ pipeline {
                 }
             }
         }
-        stage('Build image | Angular') {
+        stage('Build image | Angular | Dev') {
+			when {
+                branch 'dev'
+            }
             agent none
             steps {
                 sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
-                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular","ENVIRN":"stage"}'
+            }
+        }
+		stage('Build image | Angular | Master') {
+			when {
+                branch 'master'
+            }
+            agent none
+            steps {
+                sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest?buildargs={"NG_PROJECT_NAME":"Kwetter-Angular","ENVIRN":"prod"}'
             }
         }
         stage('Unittests & Sonarqube | API') {

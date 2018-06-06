@@ -5,6 +5,7 @@ FROM node:10.3.0-alpine as builder
 
 ## Used for the new Angular CLI Workspaces
 ARG NG_PROJECT_NAME
+ARG ENVIRN
 
 COPY package.json .
 
@@ -20,7 +21,7 @@ COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
 
-RUN npm run ng build $NG_PROJECT_NAME -- --prod
+RUN npm run ng build $NG_PROJECT_NAME -- --$ENVIRN
 
 
 ### STAGE 2: Setup ###
