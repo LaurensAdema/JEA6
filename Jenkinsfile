@@ -31,7 +31,7 @@ pipeline {
             agent none
             steps {
                 sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
-                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest&buildargs=%7B%22ENVIRN%22%3A%22stageing%22%7D'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest-staging&buildargs=%7B%22ENVIRN%22%3A%22staging%22%7D'
             }
         }
 		stage('Build image | Angular | Master') {
@@ -41,7 +41,7 @@ pipeline {
             agent none
             steps {
                 sh 'tar -cvf KwetterAngular.tar.gz -C Kwetter-Angular .'
-                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest&buildargs=%7B%22ENVIRN%22%3A%22production%22%7D'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest-production&buildargs=%7B%22ENVIRN%22%3A%22production%22%7D'
             }
         }
         stage('Unittests & Sonarqube | API') {
@@ -78,7 +78,7 @@ pipeline {
                 dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.dev.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/api.dev.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "59388" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest-staging","ExposedPorts": {"8080/tcp": { "HostPort": "59388" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "59388" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.dev.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.dev.kwetter/start'
                 }
             }
@@ -92,7 +92,7 @@ pipeline {
                 dir("Kwetter-API") {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/api.kwetter'
-                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "5938" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetter2:latest-production","ExposedPorts": {"8080/tcp": { "HostPort": "5938" }},"HostConfig": { "PortBindings": { "8080/tcp": [{ "HostPort": "5938" }] }}}\' http://192.168.1.11:2375/containers/create?name=api.kwetter'
 					sh 'curl -v -X POST http://192.168.1.11:2375/containers/api.kwetter/start'
                 }
             }
