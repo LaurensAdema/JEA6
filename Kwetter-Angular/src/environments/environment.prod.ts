@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  api: 'https://api.kwetter.ade.ma'
+  api_domain: 'api.kwetter.ade.ma',
+  api_protocol: 'https://'
 };

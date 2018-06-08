@@ -43,8 +43,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: [environment.api.replace(/(^\w+:|^)\/\//, '')],
-        blacklistedRoutes: [`${environment.api}/auth/`]
+        whitelistedDomains: [environment.api_domain],
+        blacklistedRoutes: [`${environment.api_protocol}${environment.api_domain}/auth/`]
       }
     }),
     AppRoutingModule

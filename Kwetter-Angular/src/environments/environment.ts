@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  api: 'http://localhost.ade.ma:8080'
+  api_domain: 'localhost.ade.ma:8080',
+  api_protocol: 'http://'
 };
 
 /*

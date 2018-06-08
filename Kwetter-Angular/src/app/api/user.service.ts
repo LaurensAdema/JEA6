@@ -9,14 +9,14 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUser(id) {
-    return this.http.get<User>(`${environment.api}/user/${id}`);
+    return this.http.get<User>(`${environment.api_protocol}${environment.api_domain}/user/${id}`);
   }
 
   getLoggedInUser() {
-    return this.http.get<User>(`${environment.api}/user/me`);
+    return this.http.get<User>(`${environment.api_protocol}${environment.api_domain}/user/me`);
   }
 
   getAllUsers() {
-    return this.http.get<User[]>(`${environment.api}/user`);
+    return this.http.get<User[]>(`${environment.api_protocol}${environment.api_domain}/user`);
   }
 }

@@ -9,22 +9,22 @@ export class TweetService {
   constructor(private http: HttpClient) {}
 
   getAllTweets() {
-    return this.http.get<Tweet[]>(`${environment.api}/tweet`);
+    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/tweet`);
   }
 
   getTweetsForMe() {
-    return this.http.get<Tweet[]>(`${environment.api}/tweets/me`);
+    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/tweets/me`);
   }
 
   getMyTweets() {
-    return this.http.get<Tweet[]>(`${environment.api}/user/me/tweets`);
+    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/user/me/tweets`);
   }
 
   getTweetsOf(id) {
-    return this.http.get<Tweet[]>(`${environment.api}/user/${id}/tweets`);
+    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/user/${id}/tweets`);
   }
 
   postTweet(tweet) {
-    return this.http.put<Tweet>(`${environment.api}/tweet`, tweet);
+    return this.http.put<Tweet>(`${environment.api_protocol}${environment.api_domain}/tweet`, tweet);
   }
 }
