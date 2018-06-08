@@ -1,5 +1,5 @@
 FROM payara/micro:5.181
-LABEL Maintainer="Laurens Adema <l@ade.ma>"
+ENV TZ Europe/Amsterdam
 
 RUN wget -O $PAYARA_PATH/database-connector.jar http://repo2.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/6.2.2.jre8/mssql-jdbc-6.2.2.jre8.jar
 

@@ -2,6 +2,7 @@
 
 # We label our stage as 'builder'
 FROM node:10.3.0-alpine as builder
+ENV TZ Europe/Amsterdam
 ARG ENVIRN
 
 ## Used for the new Angular CLI Workspaces
@@ -26,6 +27,7 @@ RUN npm run ng build -- -c $ENVIRN
 ### STAGE 2: Setup ###
 
 FROM nginx:1.15.0-alpine
+ENV TZ Europe/Amsterdam
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
 
