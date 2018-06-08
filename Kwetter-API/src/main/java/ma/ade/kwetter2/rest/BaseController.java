@@ -1,5 +1,6 @@
 package ma.ade.kwetter2.rest;
 
+import ma.ade.kwetter2.authentication.UseAuthentication;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.UserService;
 
@@ -12,6 +13,7 @@ import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 
 @Produces(MediaType.APPLICATION_JSON)
+@UseAuthentication
 public abstract class BaseController {
 
     @Context

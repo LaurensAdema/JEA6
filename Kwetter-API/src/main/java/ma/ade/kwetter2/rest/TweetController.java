@@ -1,13 +1,12 @@
 package ma.ade.kwetter2.rest;
 
-import ma.ade.kwetter2.authentication.Secured;
+import ma.ade.kwetter2.authentication.RequireAuthentication;
 import ma.ade.kwetter2.domain.Tweet;
 import ma.ade.kwetter2.service.TweetService;
 import ma.ade.kwetter2.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -40,7 +39,7 @@ public class TweetController extends BaseController {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Secured
+    @RequireAuthentication
     public Response AddTweet(Tweet tweet){
         tweet.setUser(getUser());
         Tweet createdTweet = tweetService.addTweet(tweet);
@@ -53,7 +52,7 @@ public class TweetController extends BaseController {
     }
 
     @PATCH
-    @Secured
+    @RequireAuthentication
     public Response UpdateTweet(Tweet tweet)
     {
         tweetService.updateTweet(tweet);
@@ -61,7 +60,7 @@ public class TweetController extends BaseController {
     }
 
     @DELETE
-    @Secured
+    @RequireAuthentication
     public Response DeleteTweet(long tweetID){
         tweetService.removeTweet(tweetID);
         return Response.ok().build();

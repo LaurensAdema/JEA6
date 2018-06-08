@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import java.security.Key;
 
 @Stateless
-public class KeyGenerator implements KeyGen {
+public class KeyGenerator implements IKeyGenerator {
     // RandomStringUtils.randomAlphanumeric(30)
     private final String key = "TempUselessKey";
 

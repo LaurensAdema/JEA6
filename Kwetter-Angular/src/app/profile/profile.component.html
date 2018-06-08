@@ -1,5 +1,5 @@
 <!--Card-->
-  <div class="card testimonial-card">
+  <div class="card testimonial-card" *ngIf="user">
 
     <!--Bacground color-->
     <div class="card-up indigo lighten-1">
@@ -7,12 +7,12 @@
 
     <!--Avatar-->
     <div class="avatar mx-auto white">
-      <img src="{{ user.profile.pictureLocation }}" class="rounded-circle">
+      <img [src]="user.profile.pictureLocation" class="rounded-circle">
     </div>
 
     <div class="card-body">
       <!--Name-->
-      <h4 class="card-title">{{ user.profile.firstName }} {{ user.profile.lastName }}</h4>
+      <h4 class="card-title">{{ user.profile.firstName + ' ' + user.profile.lastName }}</h4>
       <hr>
       <!--Quotation-->
       <p>
@@ -22,13 +22,13 @@
         {{ user.profile.location }}
       </p>
       <p>
-        <a [href]="user.profile.website" target="_blank">{{ user.profile.website }}</a>
+        <a [href]="'//'+user.profile.website" target="_blank">{{ user.profile.website }}</a>
       </p>
     </div>
 
   </div>
   <!--/.Card-->
-<section class="timeline mt-4">
+<section class="timeline mt-4" *ngIf="tweets">
   <div class="text-left">
     <div class="section-heading">
       <h3>Timeline <span class="badge blue">{{ tweets.length }}</span></h3>

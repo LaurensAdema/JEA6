@@ -4,12 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import ma.ade.kwetter2.authentication.KeyGen;
+import ma.ade.kwetter2.authentication.IKeyGenerator;
 import ma.ade.kwetter2.domain.Token;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.UserService;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -26,7 +24,7 @@ public class AuthenticationController extends BaseController {
     @Inject
     private UserService userService;
     @Inject
-    private KeyGen keyGenerator;
+    private IKeyGenerator keyGenerator;
 
     @POST
     @Path("/login")

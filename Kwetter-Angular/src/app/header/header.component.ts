@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit {
       );
     } else {
       this.user = null;
+      localStorage.removeItem('access_token');
     }
   }
 

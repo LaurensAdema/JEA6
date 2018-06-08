@@ -1,9 +1,10 @@
 package ma.ade.kwetter2.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlRootElement
-public class Token {
+public class Token implements Serializable {
     private String accessToken;
 
     public String getAccessToken() {

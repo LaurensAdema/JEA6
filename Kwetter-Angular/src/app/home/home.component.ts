@@ -3,6 +3,7 @@ import {User} from '../domain/user';
 import {AuthenticationService} from '../api/authentication.service';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {UserService} from '../api/user.service';
+import {SocketService} from '../api/socket.service';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +13,12 @@ import {UserService} from '../api/user.service';
 export class HomeComponent implements OnInit {
   user: User;
 
-  constructor(private authService: AuthenticationService, private userService: UserService, private jwtService: JwtHelperService) { }
+  constructor(private authService: AuthenticationService, private userService: UserService,
+              private jwtService: JwtHelperService, private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.loadUser();
+    this.socketService.startListener();
     this.authService.loginEvent$.subscribe(() => this.loadUser());
   }
 
@@ -28,6 +31,7 @@ export class HomeComponent implements OnInit {
       );
     } else {
       this.user = null;
+      localStorage.removeItem('access_token');
     }
   }
 

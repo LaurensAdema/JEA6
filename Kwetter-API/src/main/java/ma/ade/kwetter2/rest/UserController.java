@@ -1,6 +1,6 @@
 package ma.ade.kwetter2.rest;
 
-import ma.ade.kwetter2.authentication.Secured;
+import ma.ade.kwetter2.authentication.RequireAuthentication;
 import ma.ade.kwetter2.domain.Tweet;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.TweetService;
@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     }
     
     @PUT
-    @Secured
+    @RequireAuthentication
     public Response AddUser(User user){
         User createdUser = userService.addUser(user);
         URI location = uriInfo.getBaseUriBuilder()
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
     }
 
     @PATCH
-    @Secured
+    @RequireAuthentication
     public Response UpdateUser(User user)
     {
         userService.updateUser(user);
@@ -55,7 +55,7 @@ public class UserController extends BaseController {
     }
 
     @DELETE
-    @Secured
+    @RequireAuthentication
     public Response DeleteUser(long userID){
         userService.removeUser(userID);
         return ok();
@@ -80,7 +80,7 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/me")
-    @Secured
+    @RequireAuthentication
     public Response GetMe() {
         User user = getUser();
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
