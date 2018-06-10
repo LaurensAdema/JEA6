@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   api_domain: 'localhost.ade.ma:8080',
-  api_protocol: 'http://'
+  api_protocol: 'http://',
+  ws_protocol: 'ws://'
 };
 
 /*

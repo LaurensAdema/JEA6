@@ -46,7 +46,7 @@ export class SocketService {
   }
 
   private getSocketURL(page?: string): string {
-    let url = `ws://${environment.api_domain}/events/`;
+    let url = `${environment.ws_protocol}${environment.api_domain}/events/`;
 
     if (page) {
       url += page;
