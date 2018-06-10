@@ -2,6 +2,7 @@ package ma.ade.kwetter2.rest;
 
 import ma.ade.kwetter2.authentication.RequireAuthentication;
 import ma.ade.kwetter2.domain.Tweet;
+import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.TweetService;
 import ma.ade.kwetter2.service.UserService;
 
@@ -41,6 +42,10 @@ public class TweetController extends BaseController {
     @Consumes(MediaType.APPLICATION_JSON)
     @RequireAuthentication
     public Response AddTweet(Tweet tweet){
+        if(tweet.getMessage().length() > 140) {
+            throw new IllegalArgumentException("Illegal number of characters");
+        }
+
         tweet.setUser(getUser());
         Tweet createdTweet = tweetService.addTweet(tweet);
         URI location = uriInfo.getBaseUriBuilder()
@@ -66,6 +71,7 @@ public class TweetController extends BaseController {
         return Response.ok().build();
     }
 
+    @GET
     @Path("/{id}")
     public Response GetTweet(@PathParam("id") long id) {
         Tweet tweet = tweetService.getTweet(id);
@@ -74,6 +80,20 @@ public class TweetController extends BaseController {
             return notFound();
         }
         return ok(tweet);
+    }
+
+    @GET
+    @Path("/me")
+    @RequireAuthentication
+    public Response GetTweetsForMe() {
+        User user = getUser();
+        Collection<Tweet> tweets = tweetService.getTweetsFor(user.getId());
+
+        if(tweets.isEmpty())
+        {
+            return Response.noContent().build();
+        }
+        return ok(tweets);
     }
 
     @POST

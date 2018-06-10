@@ -7,6 +7,12 @@ import java.io.Serializable;
 @Entity
 @Table(name = "USERENTITY")
 @XmlRootElement
+@NamedQueries({
+        @NamedQuery(name = "user.getByEmail", query="SELECT u FROM User u WHERE u.email LIKE :email"),
+        @NamedQuery(name = "user.getAll", query="SELECT U FROM User U"),
+        //TODO: Create following
+        @NamedQuery(name = "user.getFollowing", query="SELECT U FROM User U")
+})
 public class User implements Serializable {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,15 +1,51 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
+import {Subject} from 'rxjs';
+import {Tweet} from '../domain/tweet';
 
 @Injectable()
 export class SocketService {
+
+  private tweetUpdated = new Subject<Tweet>();
+  tweetUpdated$ = this.tweetUpdated.asObservable();
 
   private socket: WebSocket;
 
   startListener(page?: string) {
     if (this.socket) {
+      if (this.socket.readyState !== WebSocket.OPEN && this.socket.readyState !== WebSocket.CONNECTING) {
+        this.socket.close();
+      } else {
+        this.changePage(page);
+        return;
+      }
+    }
+
+    this.socket = new WebSocket(this.getSocketURL(page));
+    this.socket.onmessage = e => this.onMessage(e);
+  }
+
+  restartListener(page?: string) {
+    if (this.socket) {
       this.socket.close();
     }
+
+    this.startListener(page);
+  }
+
+  onMessage(e) {
+    console.log(e.data);
+    this.tweetUpdated.next(JSON.parse(e.data));
+    console.log(JSON.parse(e.data));
+  }
+
+  changePage(page?: string) {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(page);
+    }
+  }
+
+  private getSocketURL(page?: string): string {
     let url = `ws://${environment.api_domain}/events/`;
 
     if (page) {
@@ -21,13 +57,6 @@ export class SocketService {
       url += `?access_token=${token}`;
     }
 
-    this.socket = new WebSocket(url);
-    this.socket.onmessage = e => {
-      console.log(e);
-    };
-  }
-
-  changePage(page?: string) {
-    this.socket.send(page);
+    return url;
   }
 }

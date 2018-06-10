@@ -7,11 +7,7 @@ import {User} from '../../domain/user';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent {
-  @Input() user: User;
+  @Input() componentUser: User;
 
   constructor() { }
-
-  color() {
-    return 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
-  }
 }

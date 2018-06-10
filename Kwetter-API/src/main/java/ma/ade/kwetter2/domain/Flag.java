@@ -43,6 +43,9 @@ public class Flag implements Serializable {
         this.flagger = flagger;
     }
 
+    public Flag() {
+    }
+
     public Flag(Long id, OffsetDateTime date, String reason, User flagger) {
         this.id = id;
         this.date = date;

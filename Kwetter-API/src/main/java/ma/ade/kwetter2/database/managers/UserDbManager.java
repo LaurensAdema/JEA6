@@ -6,8 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Stateless
 public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
@@ -27,20 +26,33 @@ public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
     }
 
     public User getByEmail(String email) {
-        List results = em.createQuery("SELECT u FROM User u WHERE u.email LIKE :email").setParameter("email", email).getResultList();
-        if(results.isEmpty())
-            return null;
-        else
-            return (User) results.get(0);
+        TypedQuery<User> query = em.createNamedQuery("user.getByEmail", User.class);
+        query.setParameter("email", email);
+        return query.getSingleResult();
     }
 
     @Override
     public boolean authenticateUser(long userID, String password) {
-        return BCrypt.checkpw(password, getEntityManager().find(User.class, userID).getPassword());
+        return BCrypt.checkpw(password, em.find(User.class, userID).getPassword());
     }
 
-    public Collection<User> getAll()
+    @Override
+    public Stream<User> getAll()
     {
-        return getEntityManager().createQuery("SELECT U FROM User U").getResultList();
+        TypedQuery<User> query = em.createNamedQuery("user.getAll", User.class);
+        return query.getResultStream();
+    }
+
+    @Override
+    public Stream<User> getFollowing(long userID){
+        TypedQuery<User> query = em.createNamedQuery("user.getFollowing", User.class);
+        //TODO: Create following
+        //query.setParameter("userID", userID);
+        return query.getResultStream();
+    }
+
+    public boolean isFollowing(String followerEmail, String followingEmail){
+        //TODO: Create following
+        return true;
     }
 }

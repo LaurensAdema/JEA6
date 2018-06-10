@@ -17,6 +17,7 @@ import { UserComponent } from './userlist/user/user.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -36,6 +37,7 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     MDBBootstrapModule.forRoot(),
     MomentModule,
     FormsModule,

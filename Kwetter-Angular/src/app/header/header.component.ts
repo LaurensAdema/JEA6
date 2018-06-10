@@ -1,10 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {User} from '../domain/user';
 import {AuthenticationService} from '../api/authentication.service';
-import {UserService} from '../api/user.service';
-import {JwtHelperService} from '@auth0/angular-jwt';
 import {Login} from '../domain/login';
 import {ModalDirective} from 'angular-bootstrap-md';
+import {UserService} from '../api/user.service';
 
 @Component({
   selector: 'app-header',
@@ -15,30 +14,21 @@ export class HeaderComponent implements OnInit {
   user: User;
   login: Login;
   search: string;
+
   @ViewChild('loginModal')
   loginModal: ModalDirective;
 
-  constructor(private authService: AuthenticationService, private userService: UserService, private jwtService: JwtHelperService) { }
+  constructor(private authService: AuthenticationService, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.login = new Login();
-    this.search = '';
     this.loadUser();
     this.authService.loginEvent$.subscribe(() => this.loadUser());
+
+    this.login = new Login();
+    this.search = '';
   }
 
-  loadUser() {
-    if (!this.jwtService.isTokenExpired()) {
-      this.userService.getLoggedInUser().subscribe(
-        user => {
-          this.user = user;
-        }
-      );
-    } else {
-      this.user = null;
-      localStorage.removeItem('access_token');
-    }
-  }
+  loadUser() { this.userService.getLoggedInUser().subscribe(user => { this.user = user; } ); }
 
   doLogin() {
     this.authService.login(this.login.email, this.login.password)

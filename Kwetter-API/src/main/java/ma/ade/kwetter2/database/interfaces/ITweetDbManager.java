@@ -8,7 +8,7 @@ package ma.ade.kwetter2.database.interfaces;
 
 import ma.ade.kwetter2.database.objects.Tweet;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  *
@@ -16,6 +16,6 @@ import java.util.Collection;
  */
 public interface ITweetDbManager extends IBaseDbManager<Tweet>
 {
-    Collection<Tweet> search(String query);
-    Collection<Tweet> getTweetsOf(long id);
+    Stream<Tweet> search(String query);
+    Stream<Tweet> getTweetsOf(long id);
 }

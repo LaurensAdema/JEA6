@@ -2,16 +2,13 @@ package ma.ade.kwetter2.websocket;
 
 import ma.ade.kwetter2.domain.Tweet;
 import ma.ade.kwetter2.domain.User;
-import ma.ade.kwetter2.events.LikeEvent;
-import ma.ade.kwetter2.events.TweetEvent;
 import ma.ade.kwetter2.service.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.ObservesAsync;
 import javax.inject.Inject;
-import javax.websocket.EncodeException;
 import javax.websocket.Session;
-import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,29 +31,30 @@ public class SessionService {
         sessions.put(session, page);
     }
 
-    private void sendObject(Session session, Object object) {
-        try {
-            session.getBasicRemote().sendObject(object);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void tweetCreated(@ObservesAsync TweetEvent event) {
-        Tweet tweet = event.getPayload();
-
+    public void updateTweet(@ObservesAsync Tweet toUpdate) {
         sessions.forEach((session, page) -> {
-            User user = userService.getUserByEmail(session.getUserPrincipal().getName());
-            sendObject(session, tweet);
-        });
-    }
+            boolean sendUpdate = false;
+            long id = -1;
+            if (!page.isEmpty()) {
+                try {
+                    id = Long.parseLong(page);
+                } catch (NumberFormatException ignored) {
+                }
 
-    public void tweetLiked(@ObservesAsync LikeEvent event) {
-        Tweet tweet = event.getPayload();
+                if (toUpdate.getUser().getId() == id) {
+                    sendUpdate = true;
+                }
+            } else {
+                if (session.getUserPrincipal() != null && !toUpdate.getUser().getEmail().equalsIgnoreCase(session.getUserPrincipal().getName())) {
+                    sendUpdate = userService.isFollowing(session.getUserPrincipal().getName(), toUpdate.getUser().getEmail());
+                } else {
+                    sendUpdate = true;
+                }
+            }
 
-        sessions.forEach((session, page) -> {
-            User user = userService.getUserByEmail(session.getUserPrincipal().getName());
-            sendObject(session, tweet);
+            if (sendUpdate) {
+                session.getAsyncRemote().sendObject(toUpdate);
+            }
         });
     }
 }

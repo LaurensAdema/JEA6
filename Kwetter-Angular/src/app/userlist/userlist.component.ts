@@ -5,7 +5,7 @@ import {User} from '../domain/user';
 @Component({
   selector: 'app-userlist',
   templateUrl: './userlist.component.html',
-  styleUrls: ['./userlist.component.scss']
+  styleUrls: ['./userlist.component.scss'],
 })
 export class UserlistComponent implements OnInit {
   users: User[] = [];

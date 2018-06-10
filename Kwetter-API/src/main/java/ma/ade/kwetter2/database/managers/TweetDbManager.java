@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Stateless
 public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbManager
@@ -26,22 +27,25 @@ public class TweetDbManager extends BaseDbManager<Tweet> implements ITweetDbMana
     }
 
     @Override
-    public Collection<Tweet> getAll()
+    public Stream<Tweet> getAll()
     {
-        return getEntityManager().createQuery("SELECT T FROM Tweet T").getResultList();
+        TypedQuery<Tweet> query = em.createNamedQuery("tweet.getAll", Tweet.class);
+        return query.getResultStream();
     }
 
     @Override
-    public Collection<Tweet> search(String query) {
+    public Stream<Tweet> search(String query) {
         TypedQuery<Tweet> typedQuery = em.createNamedQuery("tweet.search", Tweet.class);
         typedQuery.setParameter("query", query);
-        return typedQuery.getResultList();
+        return typedQuery.getResultStream();
     }
 
     @Override
-    public Collection<Tweet> getTweetsOf(long id) {
+    public Stream<Tweet> getTweetsOf(long id) {
         TypedQuery<Tweet> query = em.createNamedQuery("tweet.getTweetsOf", Tweet.class);
         query.setParameter("id", id);
-        return query.getResultList();
+        return query.getResultStream();
     }
+
+
 }

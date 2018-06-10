@@ -1,13 +1,15 @@
 package ma.ade.kwetter2.websocket;
 
 import ma.ade.kwetter2.authentication.UseAuthentication;
+import ma.ade.kwetter2.utilities.GsonEncoder;
 
 import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/events/{page}")
+@ServerEndpoint(value = "/events/{page}",
+        encoders = { GsonEncoder.class })
 @UseAuthentication
 public class WebSocketController {
     @Inject
@@ -28,7 +30,7 @@ public class WebSocketController {
     }
 
     @OnMessage
-    public void çhangePage(String message, Session session) {
+    public void changePage(String message, Session session) {
         sessionService.changePage(session, message);
     }
 }

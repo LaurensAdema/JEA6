@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Stateless
 public class UserService
@@ -34,10 +35,7 @@ public class UserService
 
     public Collection<User> getUsers()
     {
-        Collection<User> users = new ArrayList<>();
-        userDbManager.getAll().forEach(x ->
-                users.add(x.Convert()));
-        return users;
+        return userDbManager.getAll().map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toList());
     }
 
     public User addUser(User user)
@@ -64,5 +62,13 @@ public class UserService
 
     public boolean authenticateUser(long userID, String password) {
         return userDbManager.authenticateUser(userID, password);
+    }
+
+    public Collection<User> getFollowing(long userID) {
+        return userDbManager.getFollowing(userID).map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toList());
+    }
+
+    public boolean isFollowing(String followerEmail, String followingEmail){
+        return userDbManager.isFollowing(followerEmail, followingEmail);
     }
 }

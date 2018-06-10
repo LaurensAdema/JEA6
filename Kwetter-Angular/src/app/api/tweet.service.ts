@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Tweet} from '../domain/tweet';
 
@@ -13,7 +13,7 @@ export class TweetService {
   }
 
   getTweetsForMe() {
-    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/tweets/me`);
+    return this.http.get<Tweet[]>(`${environment.api_protocol}${environment.api_domain}/tweet/me`);
   }
 
   getMyTweets() {

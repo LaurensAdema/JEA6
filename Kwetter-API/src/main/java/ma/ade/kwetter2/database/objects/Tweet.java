@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 @Entity
 @NamedQueries({
         @NamedQuery(name="tweet.getTweetsOf", query="SELECT T FROM Tweet T WHERE T.user.id = :id"),
-        @NamedQuery(name="tweet.search", query="SELECT t FROM Tweet t WHERE lower(t.message) LIKE concat('%', lower(:query), '%') ")
+        @NamedQuery(name="tweet.search", query="SELECT t FROM Tweet t WHERE lower(t.message) LIKE concat('%', lower(:query), '%') "),
+        @NamedQuery(name="tweet.getAll", query="SELECT T FROM Tweet T")
 })
 public class Tweet implements Serializable {
     
@@ -48,14 +49,21 @@ public class Tweet implements Serializable {
         this.likes = new HashSet<>();
     }
     
-    public Tweet(ma.ade.kwetter2.domain.Tweet tweet)
-    {
+    public Tweet(ma.ade.kwetter2.domain.Tweet tweet) {
         this.id = tweet.getId();
         this.message = tweet.getMessage();
         this.user = tweet.getUser().Convert();
         this.date = tweet.getDate();
-        this.flags = tweet.getFlags().stream().map(flag -> flag.Convert()).collect(Collectors.toSet());
-        this.likes = tweet.getLikes().stream().map(like -> like.Convert()).collect(Collectors.toSet());
+        if (tweet.getFlags() != null) {
+            this.flags = tweet.getFlags().stream().map(ma.ade.kwetter2.domain.Flag::Convert).collect(Collectors.toSet());
+        } else {
+            this.flags = new HashSet<>();
+        }
+        if(tweet.getLikes() != null) {
+            this.likes = tweet.getLikes().stream().map(ma.ade.kwetter2.domain.User::Convert).collect(Collectors.toSet());
+        } else {
+            this.likes = new HashSet<>();
+        }
     }
     
     public Long getId()

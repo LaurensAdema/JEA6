@@ -99,8 +99,8 @@ public class Tweet implements Serializable
         this.message = tweet.getMessage();
         this.user = tweet.getUser().Convert();
         this.date = tweet.getDate();
-        this.flags = tweet.getFlags().stream().map(flag -> flag.Convert()).collect(Collectors.toSet());
-        this.likes = tweet.getLikes().stream().map(like -> like.Convert()).collect(Collectors.toSet());
+        this.flags = tweet.getFlags().stream().map(ma.ade.kwetter2.database.objects.Flag::Convert).collect(Collectors.toSet());
+        this.likes = tweet.getLikes().stream().map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toSet());
     }
     
     public ma.ade.kwetter2.database.objects.Tweet Convert()

@@ -1,17 +1,17 @@
 <!-- Card -->
-<div class="card card-personal">
+<div class="card card-personal" *ngIf="componentUser">
 
   <!-- Card image-->
-  <img [routerLink]="['/user/' + user.id]" class="card-img-top" [src]="user.profile.pictureLocation" [alt]="user.profile.firstName + ' ' + user.profile.lastName">
+  <img [routerLink]="['/user/' + componentUser.id]" class="card-img-top" [src]="componentUser.profile.pictureLocation" [alt]="componentUser.profile.firstName + ' ' + componentUser.profile.lastName">
   <!-- Card image-->
 
   <!-- Card content -->
   <div class="card-body">
     <!-- Title-->
-    <a [routerLink]="['/user/' + user.id]"><h4 class="card-title title-one">{{ user.profile.firstName }} {{ user.profile.lastName }}</h4></a>
-    <p class="card-meta">{{ user.profile.location }}</p>
+    <a [routerLink]="['/user/' + componentUser.id]"><h4 class="card-title title-one">{{ componentUser.profile.firstName }} {{ componentUser.profile.lastName }}</h4></a>
+    <p class="card-meta">{{ componentUser.profile.location }}</p>
     <!-- Text -->
-    <p class="card-text">{{ user.profile.bio }}</p>
+    <p class="card-text">{{ componentUser.profile.bio }}</p>
     <hr>
     <a class="card-meta"><span><i class="fa fa-user"></i> 0 Followers</span></a>
   </div>
