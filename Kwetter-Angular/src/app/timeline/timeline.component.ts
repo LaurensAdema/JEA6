@@ -86,8 +86,7 @@ export class TimelineComponent implements OnInit, OnChanges {
 
   updateTweet(existingTweet: Tweet, toUpdate: Tweet) {
     console.log(`Updated tweet with id ${toUpdate.id}`);
-    const index = this.tweets.indexOf(existingTweet);
-    this.tweets.splice(index, 1, toUpdate);
+    Object.assign(existingTweet, existingTweet, toUpdate);
   }
 
   deleteTweet(toDelete: Tweet) {

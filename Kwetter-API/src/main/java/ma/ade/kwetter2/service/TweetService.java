@@ -72,10 +72,14 @@ public class TweetService
     }
 
     public Tweet toggleLike(long tweetId, long likerId){
-        return tweetDbManager.toggleLike(tweetId, likerId).convert();
+        Tweet updatedTweet = tweetDbManager.toggleLike(tweetId, likerId).convert();
+        updateTweetEvent.fireAsync(updatedTweet);
+        return updatedTweet;
     }
 
     public Tweet addFlag(long tweetId, Flag flag){
-        return tweetDbManager.addFlag(tweetId, flag.convert()).convert();
+        Tweet updatedTweet = tweetDbManager.addFlag(tweetId, flag.convert()).convert();
+        updateTweetEvent.fireAsync(updatedTweet);
+        return updatedTweet;
     }
 }
