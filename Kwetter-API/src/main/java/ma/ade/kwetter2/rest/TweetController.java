@@ -1,6 +1,7 @@
 package ma.ade.kwetter2.rest;
 
 import ma.ade.kwetter2.authentication.RequireAuthentication;
+import ma.ade.kwetter2.domain.Flag;
 import ma.ade.kwetter2.domain.Tweet;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.TweetService;
@@ -9,10 +10,7 @@ import ma.ade.kwetter2.service.UserService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.Collection;
 
@@ -48,12 +46,9 @@ public class TweetController extends BaseController {
 
         tweet.setUser(getUser());
         Tweet createdTweet = tweetService.addTweet(tweet);
-        URI location = uriInfo.getBaseUriBuilder()
-                .path(TweetController.class)
-                .path(TweetController.class, "GetTweet")
-                .build(createdTweet.getId());
 
-        return created(createdTweet, location);
+        URI getTweetLink = uriInfo.getBaseUriBuilder().path(TweetController.class).path(TweetController.class, "GetTweet").build(createdTweet.getId());
+        return created(createdTweet, getTweetLink);
     }
 
     @PATCH
@@ -106,5 +101,33 @@ public class TweetController extends BaseController {
             return notFound();
         }
         return ok(foundTweets);
+    }
+
+    @POST
+    @Path("/{id}/like")
+    @RequireAuthentication
+    public Response like(@PathParam("id") long id) {
+        Tweet tweet = tweetService.toggleLike(id, getUser().getId());
+
+        if (tweet == null) {
+            return notFound();
+        }
+
+        Link getUserLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(UserController.class).path(UserController.class, "GetUser")).rel("user").build(tweet.getUser().getEmail());
+        return ok(tweet, getUserLink);
+    }
+
+    @POST
+    @Path("/{id}/flag")
+    @RequireAuthentication
+    public Response flag(@PathParam("id") long id, Flag flag) {
+        flag.setFlagger(getUser());
+        Tweet tweet = tweetService.addFlag(id, flag);
+        if(tweet == null) {
+            return notModified("Already flagged");
+        }
+
+        Link getUserLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(UserController.class).path(UserController.class, "GetUser")).rel("user").build(tweet.getUser().getEmail());
+        return ok(tweet, getUserLink);
     }
 }

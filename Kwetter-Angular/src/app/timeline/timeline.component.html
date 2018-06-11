@@ -3,6 +3,6 @@
     <div class="section-heading">
       <h3>Timeline <span class="badge blue">{{ tweets.length }}</span></h3>
     </div>
-    <app-tweet [@ngIfAnimation] *ngFor="let tweet of tweets; "[tweet]="tweet"></app-tweet>
+    <app-tweet [@ngIfAnimation] *ngFor="let tweet of tweets; "[tweet]="tweet" [user]="user"></app-tweet>
   </div>
 </section>

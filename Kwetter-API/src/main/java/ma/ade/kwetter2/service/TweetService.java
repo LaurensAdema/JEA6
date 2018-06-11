@@ -1,15 +1,14 @@
 package ma.ade.kwetter2.service;
 
 import ma.ade.kwetter2.database.interfaces.ITweetDbManager;
+import ma.ade.kwetter2.domain.Flag;
 import ma.ade.kwetter2.domain.Tweet;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Stateless
 public class TweetService
@@ -26,17 +25,17 @@ public class TweetService
         if (result == null)
             return null;
         else
-            return result.Convert();
+            return result.convert();
     }
 
     public Collection<Tweet> getTweets()
     {
-        return tweetDbManager.getAll().map(ma.ade.kwetter2.database.objects.Tweet::Convert).collect(Collectors.toList());
+        return tweetDbManager.getAll().map(ma.ade.kwetter2.database.objects.Tweet::convert).collect(Collectors.toList());
     }
 
     public Tweet addTweet(Tweet tweet)
     {
-        Tweet toAdd = tweetDbManager.create(tweet.Convert()).Convert();
+        Tweet toAdd = tweetDbManager.create(tweet.Convert()).convert();
         updateTweetEvent.fireAsync(toAdd);
         return toAdd;
     }
@@ -44,9 +43,11 @@ public class TweetService
     public void updateTweet(Tweet tweet)
     {
         ma.ade.kwetter2.database.objects.Tweet databaseTweet = tweetDbManager.get(tweet.getId());
-        databaseTweet.setMessage(tweet.getMessage());
-        tweetDbManager.update(databaseTweet);
-        updateTweetEvent.fireAsync(databaseTweet.Convert());
+        if(databaseTweet != null) {
+            tweetDbManager.update(tweet.Convert());
+        }
+
+        updateTweetEvent.fireAsync(tweet);
     }
 
     public void removeTweet(long tweetID)
@@ -58,15 +59,23 @@ public class TweetService
     }
 
     public Collection<Tweet> searchTweet(String query) {
-        return tweetDbManager.search(query).map(ma.ade.kwetter2.database.objects.Tweet::Convert).collect(Collectors.toList());
+        return tweetDbManager.search(query).map(ma.ade.kwetter2.database.objects.Tweet::convert).collect(Collectors.toList());
     }
 
     public Collection<Tweet> getTweetsOf(long id) {
-        return tweetDbManager.getTweetsOf(id).map(ma.ade.kwetter2.database.objects.Tweet::Convert).collect(Collectors.toList());
+        return tweetDbManager.getTweetsOf(id).map(ma.ade.kwetter2.database.objects.Tweet::convert).collect(Collectors.toList());
     }
 
     public Collection<Tweet> getTweetsFor(long id) {
         //TODO: Change to following only
-        return tweetDbManager.getAll().map(ma.ade.kwetter2.database.objects.Tweet::Convert).collect(Collectors.toList());
+        return tweetDbManager.getAll().map(ma.ade.kwetter2.database.objects.Tweet::convert).collect(Collectors.toList());
+    }
+
+    public Tweet toggleLike(long tweetId, long likerId){
+        return tweetDbManager.toggleLike(tweetId, likerId).convert();
+    }
+
+    public Tweet addFlag(long tweetId, Flag flag){
+        return tweetDbManager.addFlag(tweetId, flag.convert()).convert();
     }
 }

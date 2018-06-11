@@ -6,6 +6,6 @@ export class Tweet {
   id: number;
   message: string;
   user: User;
-  likes: Set<User>;
-  flags: Set<Flag>;
+  likes: Array<User>;
+  flags: Array<Flag>;
 }

@@ -14,11 +14,13 @@ export class HeaderComponent implements OnInit {
   user: User;
   login: Login;
   search: string;
+  error: string;
 
   @ViewChild('loginModal')
   loginModal: ModalDirective;
 
-  constructor(private authService: AuthenticationService, private userService: UserService) { }
+  constructor(private authService: AuthenticationService, private userService: UserService) {
+  }
 
   ngOnInit(): void {
     this.loadUser();
@@ -28,12 +30,21 @@ export class HeaderComponent implements OnInit {
     this.search = '';
   }
 
-  loadUser() { this.userService.getLoggedInUser().subscribe(user => { this.user = user; } ); }
+  loadUser() {
+    this.userService.getLoggedInUser().subscribe(user => {
+      this.user = user;
+    });
+  }
 
   doLogin() {
     this.authService.login(this.login.email, this.login.password)
       .subscribe(resp => {
+        this.login = new Login();
         this.loginModal.hide();
+        this.error = '';
+      }, error => {
+        this.login.password = '';
+        this.error = error.toString();
       });
   }
 

@@ -34,9 +34,7 @@ export class SocketService {
   }
 
   onMessage(e) {
-    console.log(e.data);
     this.tweetUpdated.next(JSON.parse(e.data));
-    console.log(JSON.parse(e.data));
   }
 
   changePage(page?: string) {

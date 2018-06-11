@@ -12,11 +12,14 @@ public class Flag {
 
     @ManyToOne
     private User flagger;
+    @ManyToOne
+    private Tweet tweet;
 
-    public Flag(OffsetDateTime date, String reason, User flagger) {
+    public Flag(OffsetDateTime date, String reason, User flagger, Tweet tweet) {
         this.date = date;
         this.reason = reason;
         this.flagger = flagger;
+        this.tweet = tweet;
     }
 
     public Flag(ma.ade.kwetter2.domain.Flag flag){
@@ -59,6 +62,14 @@ public class Flag {
 
     public void setFlagger(User flagger) {
         this.flagger = flagger;
+    }
+
+    public Tweet getTweet() {
+        return tweet;
+    }
+
+    public void setTweet(Tweet tweet) {
+        this.tweet = tweet;
     }
 
     public ma.ade.kwetter2.domain.Flag Convert()

@@ -47,12 +47,13 @@ public class UserService
     public void updateUser(User user)
     {
         ma.ade.kwetter2.database.objects.User databaseUser = userDbManager.get(user.getId());
+        ma.ade.kwetter2.database.objects.User newDatabaseUser = user.Convert();
         if(user.getPassword() != null && !user.getPassword().isEmpty()){
-            databaseUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+            newDatabaseUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+        } else {
+            newDatabaseUser.setPassword(databaseUser.getPassword());
         }
-        databaseUser.setEmail(user.getEmail());
-        databaseUser.setProfile(user.getProfile().Convert());
-        userDbManager.update(databaseUser);
+        userDbManager.update(newDatabaseUser);
     }
 
     public void removeUser(long userID)

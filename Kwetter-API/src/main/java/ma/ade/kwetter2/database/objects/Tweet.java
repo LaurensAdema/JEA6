@@ -55,7 +55,7 @@ public class Tweet implements Serializable {
         this.user = tweet.getUser().Convert();
         this.date = tweet.getDate();
         if (tweet.getFlags() != null) {
-            this.flags = tweet.getFlags().stream().map(ma.ade.kwetter2.domain.Flag::Convert).collect(Collectors.toSet());
+            this.flags = tweet.getFlags().stream().map(ma.ade.kwetter2.domain.Flag::convert).collect(Collectors.toSet());
         } else {
             this.flags = new HashSet<>();
         }
@@ -116,8 +116,24 @@ public class Tweet implements Serializable {
         this.flags = flags;
     }
 
-    public ma.ade.kwetter2.domain.Tweet Convert()
+    public ma.ade.kwetter2.domain.Tweet convert()
     {
         return new ma.ade.kwetter2.domain.Tweet(this);
+    }
+
+    public void addLike(User liker) {
+        likes.add(liker);
+    }
+
+    public void addFlag(Flag flag) {
+        flags.add(flag);
+    }
+
+    public void removeLike(User liker) {
+        likes.remove(liker);
+    }
+
+    public void removeFlag(Flag flag) {
+        flags.remove(flag);
     }
 }

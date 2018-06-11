@@ -38,11 +38,8 @@ public class UserController extends BaseController {
     @RequireAuthentication
     public Response AddUser(User user){
         User createdUser = userService.addUser(user);
-        URI location = uriInfo.getBaseUriBuilder()
-                .path(UserController.class)
-                .path(UserController.class, "GetUser")
-                .build(createdUser.getId());
 
+        URI location = uriInfo.getBaseUriBuilder().path(UserController.class).path(UserController.class, "GetUser").build(createdUser.getId());
         return created(createdUser, location);
     }
 
@@ -83,13 +80,8 @@ public class UserController extends BaseController {
     @RequireAuthentication
     public Response GetMe() {
         User user = getUser();
-        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
-                .path(UserController.class)
-                .path(UserController.class, "GetUser"))
-                .rel("user")
-                .build(user.getEmail());
-
-        return Response.ok(user).links(userLink).build();
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(UserController.class).path(UserController.class, "GetUser")).rel("user").build(user.getEmail());
+        return ok(user, userLink);
     }
 
     @GET

@@ -6,6 +6,7 @@
 package ma.ade.kwetter2.database.interfaces;
 
 
+import ma.ade.kwetter2.database.objects.Flag;
 import ma.ade.kwetter2.database.objects.Tweet;
 
 import java.util.stream.Stream;
@@ -18,4 +19,6 @@ public interface ITweetDbManager extends IBaseDbManager<Tweet>
 {
     Stream<Tweet> search(String query);
     Stream<Tweet> getTweetsOf(long id);
+    Tweet toggleLike(long tweetId, long likerId);
+    Tweet addFlag(long flaggerId, Flag flag);
 }

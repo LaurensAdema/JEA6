@@ -60,7 +60,7 @@ public class Flag implements Serializable {
         this.flagger = flag.getFlagger().Convert();
     }
 
-    public ma.ade.kwetter2.database.objects.Flag Convert() {
+    public ma.ade.kwetter2.database.objects.Flag convert() {
         return new ma.ade.kwetter2.database.objects.Flag(this);
     }
 }
