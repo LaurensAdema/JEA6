@@ -1,0 +1,62 @@
+<section class="tweet" [@animateTweet]>
+  <div class="row">
+    <div class="col-sm-2 col-12">
+      <img [routerLink]="['/user/' + tweet.user.id]" [src]="tweet.user.profile.pictureLocation"
+           [alt]="tweet.user.profile.firstName + ' ' + tweet.user.profile.lastName">
+    </div>
+    <div class="col-sm-10 col-12">
+      <div id="flag-component" *ngIf="user && user.id !== tweet.user.id">
+        <a (click)="flagModal.show()" data-toggle="modal" data-target="#modalConfirmFlag"
+           *ngIf="!flaggedByMe"><span class="flag-button not-flagged"><i
+          class="fa fa-flag"></i></span></a>
+        <span *ngIf="flaggedByMe" class="flag-button flagged" data-toggle="tooltip" data-placement="top"
+              title="This tweet has been flagged by you"><i class="fa fa-flag"></i></span>
+      </div>
+      <a [routerLink]="['/user/' + tweet.user.id]"><h3 class="user-name">{{ tweet.user.profile.firstName }} {{
+        tweet.user.profile.lastName }}</h3></a>
+      <div class="card-data">
+        <ul class="list-unstyled">
+          <li class="comment-date"><i class="fa fa-clock-o"></i> {{ tweet.date | amTimeAgo }}</li>
+        </ul>
+      </div>
+      <p class="comment-text">{{ tweet.message }}</p>
+      <div class="social-meta">
+        <span><i *ngIf="user" [class]="likedByMe ? 'fa fa-heart' : 'fa fa-heart-o'" (click)="like()"></i>{{ tweet.likes.length }} like{{ tweet.likes.length != 1 ? 's' : '' }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--Modal: Flag Modal-->
+<div mdbModal #flagModal="mdb-modal" class="modal fade" id="flagModal" role="dialog" aria-labelledby="flagModal"
+     aria-hidden="true" *ngIf="user && !flaggedByMe">
+  <div class="modal-dialog modal-md modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
+      </div>
+      <!--Body-->
+      <form (ngSubmit)="handleFlag()" #submitFlagForm="ngForm" class="md-form">
+        <div class="modal-body">
+          <i class="fa fa-flag fa-4x animated rotateInUpLeft"></i>
+          <p>You are about to flag the tweet of <b>{{ tweet.user.profile.firstName }} {{ tweet.user.profile.lastName
+            }}</b></p>
+          <div class="md-form">
+            <textarea mdbInputDirective required [(ngModel)]="flag.reason" type="text" id="reason-{{tweet.id}}" class="form-control md-textarea" rows="3" name="reason"></textarea>
+            <label for="reason-{{tweet.id}}">Tell us why.</label>
+          </div>
+        </div>
+
+        <!--Footer-->
+        <div class="modal-footer flex-center">
+          <a (click)="flagModal.hide()" type="button" class="btn  btn-outline-danger" data-dismiss="modal">I changed my mind</a>
+          <button type="submit" class="btn  btn-danger waves-effect" [disabled]="!submitFlagForm.form.valid">Flag tweet</button>
+        </div>
+      </form>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: Flag Modal-->

@@ -1,0 +1,38 @@
+<!--Card-->
+<div class="card testimonial-card" *ngIf="profileUser">
+
+  <!--Bacground color-->
+  <div class="card-up indigo lighten-1">
+  </div>
+
+  <!--Avatar-->
+  <div class="avatar mx-auto white">
+    <img [src]="profileUser.profile.pictureLocation" class="rounded-circle">
+  </div>
+
+  <div class="card-body">
+    <!--Name-->
+    <h4 class="card-title">{{ profileUser.profile.firstName + ' ' + profileUser.profile.lastName }}</h4>
+    <hr>
+    <!--Quotation-->
+    <p>
+      <i class="fa fa-quote-left"></i> {{ profileUser.profile.bio }} <i class="fa fa-quote-right"></i>
+    </p>
+    <p>
+      {{ profileUser.profile.location }}
+    </p>
+    <p>
+      <a [href]="'//'+profileUser.profile.website" target="_blank">{{ profileUser.profile.website }}</a>
+    </p>
+    <a class="card-meta">
+      <span>following {{ profileUser.following.length }} person{{ profileUser.following.length != 1 ? 's' : '' }}</span>
+    </a>
+    <span class="card-meta"><i class="fa fa-users"></i></span>
+    <a class="card-meta">
+      <span>{{ profileUser.followers.length }} follower{{ profileUser.followers.length != 1 ? 's' : '' }}</span>
+    </a>
+  </div>
+
+</div>
+<!--/.Card-->
+<app-timeline [timelineUser]="profileUser" [blockTimeline]="blockTimeline"></app-timeline>
