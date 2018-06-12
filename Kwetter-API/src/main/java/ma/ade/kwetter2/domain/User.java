@@ -2,6 +2,9 @@ package ma.ade.kwetter2.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @XmlRootElement
 public class User implements Serializable
@@ -10,6 +13,8 @@ public class User implements Serializable
     private String email;
     private String password;
     private Profile profile;
+    private Set<User> following;
+    private Set<User> followers;
 
     public Long getId()
     {
@@ -51,6 +56,22 @@ public class User implements Serializable
         this.profile = profile;
     }
 
+    public Set<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
+    }
+
+    public Set<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+
     public User() {
     }
 
@@ -73,9 +94,11 @@ public class User implements Serializable
         this.id = user.getId();
         this.email = user.getEmail();
         this.profile = user.getProfile().Convert();
+        this.following = user.getFollowing().stream().map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toSet());
+        this.followers = new HashSet<>();
     }
     
-    public ma.ade.kwetter2.database.objects.User Convert()
+    public ma.ade.kwetter2.database.objects.User convert()
     {
         return new ma.ade.kwetter2.database.objects.User(this);
     }

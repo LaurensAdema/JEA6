@@ -9,6 +9,7 @@
         <a [routerLink]="['user']" class="nav-link waves-light" mdbWavesEffect>Users</a>
       </li>
     </ul>
+    <!--
     <form class="form-inline waves-light" mdbWavesEffect>
       <div class="md-form mt-0">
         <form (ngSubmit)="doSearch()" #searchForm="ngForm">
@@ -16,11 +17,12 @@
                  [(ngModel)]="search" name="query" #query="ngModel">
         </form>
       </div>
-    </form>
+    </form>-->
     <ul class="navbar-nav nav-flex-icons" *ngIf="user">
+      <!--
       <li class="nav-item">
         <a class="nav-link waves-effect waves-light">1 <i class="fa fa-envelope"></i></a>
-      </li>
+      </li>-->
       <li class="nav-item avatar dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light waves-effect" mdbWavesEffect>
           <img src="{{ user.profile.pictureLocation }}" class="img-fluid rounded-circle z-depth-0"><span class="caret"></span>

@@ -5,4 +5,6 @@ export class User {
   password: string;
   id: number;
   profile: Profile;
+  following: Array<User>;
+  followers: Array<User>;
 }

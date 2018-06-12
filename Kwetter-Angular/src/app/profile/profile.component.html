@@ -24,6 +24,13 @@
     <p>
       <a [href]="'//'+profileUser.profile.website" target="_blank">{{ profileUser.profile.website }}</a>
     </p>
+    <a class="card-meta">
+      <span>following {{ profileUser.following.length }} person{{ profileUser.following.length != 1 ? 's' : '' }}</span>
+    </a>
+    <span class="card-meta"><i class="fa fa-users"></i></span>
+    <a class="card-meta">
+      <span>{{ profileUser.followers.length }} follower{{ profileUser.followers.length != 1 ? 's' : '' }}</span>
+    </a>
   </div>
 
 </div>

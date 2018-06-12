@@ -24,7 +24,7 @@ public class Tweet implements Serializable {
     private User user;
     @ManyToMany
     private Set<User> likes;
-    @ManyToMany
+    @OneToMany
     private Set<Flag> flags;
 
     public Tweet() {
@@ -52,7 +52,7 @@ public class Tweet implements Serializable {
     public Tweet(ma.ade.kwetter2.domain.Tweet tweet) {
         this.id = tweet.getId();
         this.message = tweet.getMessage();
-        this.user = tweet.getUser().Convert();
+        this.user = tweet.getUser().convert();
         this.date = tweet.getDate();
         if (tweet.getFlags() != null) {
             this.flags = tweet.getFlags().stream().map(ma.ade.kwetter2.domain.Flag::convert).collect(Collectors.toSet());
@@ -60,7 +60,7 @@ public class Tweet implements Serializable {
             this.flags = new HashSet<>();
         }
         if(tweet.getLikes() != null) {
-            this.likes = tweet.getLikes().stream().map(ma.ade.kwetter2.domain.User::Convert).collect(Collectors.toSet());
+            this.likes = tweet.getLikes().stream().map(ma.ade.kwetter2.domain.User::convert).collect(Collectors.toSet());
         } else {
             this.likes = new HashSet<>();
         }

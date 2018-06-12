@@ -19,7 +19,7 @@ public interface IUserDbManager extends IBaseDbManager<User>
 
     boolean authenticateUser(long userID, String password);
 
-    Stream<User> getFollowing(long userID);
+    Stream<User> getFollowers(long userID);
 
     boolean isFollowing(String followerEmail, String followingEmail);
 }

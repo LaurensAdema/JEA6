@@ -44,15 +44,20 @@ public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
     }
 
     @Override
-    public Stream<User> getFollowing(long userID){
-        TypedQuery<User> query = em.createNamedQuery("user.getFollowing", User.class);
-        //TODO: Create following
+    public Stream<User> getFollowers(long userID){
+        TypedQuery<User> query = em.createNamedQuery("user.getFollowers", User.class);
+        //TODO: Create followers
         //query.setParameter("userID", userID);
         return query.getResultStream();
     }
 
+    @Override
     public boolean isFollowing(String followerEmail, String followingEmail){
-        //TODO: Create following
-        return true;
+        TypedQuery<User> followerQuery = em.createNamedQuery("user.getByEmail", User.class);
+        followerQuery.setParameter("email", followerEmail);
+        User follower = followerQuery.getSingleResult();
+        //TODO: Implement following
+        return follower.getFollowing().stream().anyMatch(user -> user.getEmail().equalsIgnoreCase(followingEmail));
+        //return true;
     }
 }

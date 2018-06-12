@@ -6,7 +6,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -41,13 +40,13 @@ public class UserService
     public User addUser(User user)
     {
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
-        return userDbManager.create(user.Convert()).Convert();
+        return userDbManager.create(user.convert()).Convert();
     }
 
     public void updateUser(User user)
     {
         ma.ade.kwetter2.database.objects.User databaseUser = userDbManager.get(user.getId());
-        ma.ade.kwetter2.database.objects.User newDatabaseUser = user.Convert();
+        ma.ade.kwetter2.database.objects.User newDatabaseUser = user.convert();
         if(user.getPassword() != null && !user.getPassword().isEmpty()){
             newDatabaseUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         } else {
@@ -65,8 +64,8 @@ public class UserService
         return userDbManager.authenticateUser(userID, password);
     }
 
-    public Collection<User> getFollowing(long userID) {
-        return userDbManager.getFollowing(userID).map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toList());
+    public Collection<User> getFollowers(long userID) {
+        return userDbManager.getFollowers(userID).map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toList());
     }
 
     public boolean isFollowing(String followerEmail, String followingEmail){

@@ -3,6 +3,9 @@ package ma.ade.kwetter2.database.objects;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERENTITY")
@@ -10,8 +13,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "user.getByEmail", query="SELECT u FROM User u WHERE u.email LIKE :email"),
         @NamedQuery(name = "user.getAll", query="SELECT U FROM User U"),
-        //TODO: Create following
-        @NamedQuery(name = "user.getFollowing", query="SELECT U FROM User U")
+        //TODO: Create followers
+        @NamedQuery(name = "user.getFollowers", query="SELECT U FROM User U")
 })
 public class User implements Serializable {
     
@@ -23,16 +26,19 @@ public class User implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL)
     private Profile profile;
+    @ManyToMany
+    private Set<User> following;
 
     public User() {
     }
 
-    public User(long id, String email, String password, Profile profile)
+    public User(long id, String email, String password, Profile profile, Set<User> following)
     {
         this.id = id;
         this.email = email;
         this.password = password;
         this.profile = profile;
+        this.following = following;
     }
     
     public User(String email, String password, Profile profile)
@@ -40,6 +46,7 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.profile = profile;
+        this.following = new HashSet<>();
     }
     
     public User(ma.ade.kwetter2.domain.User user)
@@ -48,6 +55,11 @@ public class User implements Serializable {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.profile = user.getProfile().Convert();
+        if (user.getFollowing() != null) {
+            this.following = user.getFollowing().stream().map(ma.ade.kwetter2.domain.User::convert).collect(Collectors.toSet());
+        } else {
+            this.following = new HashSet<>();
+        }
     }
     
     public long getId(){
@@ -82,6 +94,14 @@ public class User implements Serializable {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public Set<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
     }
 
     public ma.ade.kwetter2.domain.User Convert()

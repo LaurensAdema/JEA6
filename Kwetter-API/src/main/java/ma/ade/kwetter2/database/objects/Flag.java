@@ -26,7 +26,7 @@ public class Flag {
         this.id = flag.getId();
         this.date = flag.getDate();
         this.reason = flag.getReason();
-        this.flagger = flag.getFlagger().Convert();
+        this.flagger = flag.getFlagger().convert();
     }
 
     public Flag() {
