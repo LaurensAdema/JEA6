@@ -26,6 +26,7 @@ public class StartUp {
         user1 = userService.getUserByEmail(user1.getEmail());
 
         tweetService.addTweet(new Tweet("Hello World", user1));
+         tweetService.addTweet(new Tweet("HelloDemo", user1));
 
         User user2 = new User("a.doe@ade.ma", "password", new Profile("Anna", "Doe", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, adipisci", "Lorem", "www.google.nl", "https://mdbootstrap.com/img/Photos/Avatars/img%20%2810%29.jpg"));
         userService.addUser(user2);
