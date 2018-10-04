@@ -25,7 +25,7 @@
             <property name="password" value="=/2Ce55~.mM32&lt;6Z"></property>
             <property name="databaseName" value="kwetter"></property>
             <property name="roleName" value="db_ddladmin"></property>
-            <property name="serverName" value="dev.ade.ma"></property>
+            <property name="serverName" value="development.ade.ma"></property>
             <property name="user" value="kwetter"></property>
             <property name="networkProtocol" value="TCP"></property>
             <property name="portNumber" value="1433"></property>
