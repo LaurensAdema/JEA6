@@ -17,6 +17,20 @@ pipeline {
                 }
             }
         }
+		stage('Build | Admin') {
+			agent {
+				docker {
+					image 'microsoft/dotnet:latest'
+					args '--network host'
+				}
+			}
+            steps {
+                dir("Kwetter-Admin") {
+                    sh 'dotnet build'
+                    archiveArtifacts artifacts: '/Kwetter-Admin/bin', fingerprint: true
+                }
+            }
+        }
         stage('Build image | API') {
             steps {
                 dir("Kwetter-API") {
@@ -46,12 +60,38 @@ pipeline {
                 sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAngular.tar.gz" "http://192.168.1.11:2375/build?t=ma.ade/kwetterangular:latest-production&buildargs=%7B%22ENVIRN%22%3A%22production%22%7D"'
             }
         }
+		stage('Build image | Admin | Staging') {
+            when {
+                not {
+                    branch 'master'
+                }
+            }
+            agent none
+            steps {
+                sh 'tar -cvf KwetterAdmin.tar.gz -C "Kwetter-Admin/Kwetter-Admin" .'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAdmin.tar.gz" "http://192.168.1.11:2375/build?t=ma.ade/kwetteradmin:latest-staging&buildargs=%7B%22ENVIRN%22%3A%22staging%22%7D"'
+            }
+        }
+		stage('Build image | Admin | Production') {
+			when {
+                branch 'master'
+            }
+            agent none
+            steps {
+                sh 'tar -cvf KwetterAdmin.tar.gz -C "Kwetter-Admin/Kwetter-Admin" .'
+                sh 'curl -v -X POST -H "Content-Type:application/tar" --data-binary "@KwetterAdmin.tar.gz" "http://192.168.1.11:2375/build?t=ma.ade/kwetteradmin:latest-production&buildargs=%7B%22ENVIRN%22%3A%22production%22%7D"'
+            }
+        }
         stage('Unittests & Sonarqube | API') {
             steps {
                 dir("Kwetter-API") {
-                    configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'SonarSettings')]) {
-                        sh 'mvn -s $SonarSettings clean package sonar:sonar -B'
-                    }
+					withSonarQubeEnv('Adema') {
+					  // requires SonarQube Scanner for Maven 3.2+
+					  sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+					}
+                    //configFileProvider([configFile(fileId: '568fd3ab-9b40-4b96-803c-9bd2bf3ce12b', variable: 'SonarSettings')]) {
+                    //    sh 'mvn -s $SonarSettings clean package sonar:sonar -B'
+                    //}
                 }
             }
         }
@@ -127,6 +167,36 @@ pipeline {
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/stop'
                     sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/kwetter'
                     sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetterangular:latest-production","ExposedPorts": {"4200/tcp": { "HostPort": "4200" }},"HostConfig": { "PortBindings": { "4200/tcp": [{ "HostPort": "4200" }] }}}\' http://192.168.1.11:2375/containers/create?name=kwetter'
+                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
+                }
+            }
+        }
+		stage('Deploy | Admin | Staging') {
+            when {
+                not {
+                    branch 'master'
+                }
+            }
+            agent none
+            steps {
+                dir("Kwetter-Admin") {
+                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.admin.kwetter/stop'
+                    sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/dev.admin.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetteradmin:latest-staging"}\' http://192.168.1.11:2375/containers/create?name=dev.admin.kwetter'
+                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/dev.kwetter/start'
+                }
+            }
+        }
+        stage('Deploy | Admin | Production') {
+            when {
+                branch 'master'
+            }
+            agent none
+            steps {
+                dir("Kwetter-Admin") {
+                    sh 'curl -v -X POST http://192.168.1.11:2375/containers/admin.kwetter/stop'
+                    sh 'curl -v -X DELETE http://192.168.1.11:2375/containers/admin.kwetter'
+                    sh 'curl -v -X POST -H "Content-Type: application/json" -d \'{"Image": "ma.ade/kwetteradmin:latest-production}\' http://192.168.1.11:2375/containers/create?name=admin.kwetter'
                     sh 'curl -v -X POST http://192.168.1.11:2375/containers/kwetter/start'
                 }
             }
