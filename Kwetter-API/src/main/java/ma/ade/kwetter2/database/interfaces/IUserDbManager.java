@@ -6,6 +6,7 @@
 package ma.ade.kwetter2.database.interfaces;
 
 import ma.ade.kwetter2.database.objects.User;
+import ma.ade.kwetter2.database.objects.Token;
 
 import java.util.stream.Stream;
 
@@ -22,4 +23,6 @@ public interface IUserDbManager extends IBaseDbManager<User>
     Stream<User> getFollowers(long userID);
 
     boolean isFollowing(String followerEmail, String followingEmail);
+
+    void storeToken (long userID, Token token);
 }

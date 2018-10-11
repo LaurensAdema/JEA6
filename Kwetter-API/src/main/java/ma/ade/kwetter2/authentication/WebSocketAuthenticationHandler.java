@@ -15,7 +15,7 @@ public class WebSocketAuthenticationHandler extends BaseAuthenticationHandler im
         String accessToken = servletRequest.getParameter("access_token");
 
         if(accessToken != null && !accessToken.isEmpty()){
-            String username = getUsername(accessToken);
+            String username = validateToken(accessToken, this.servletRequest.getSession().getId());
             servletRequest = new HttpServletRequestWrapper((HttpServletRequest) servletRequest) {
                 @Override
                 public Principal getUserPrincipal() {

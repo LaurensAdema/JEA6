@@ -2,6 +2,7 @@ package ma.ade.kwetter2.database.managers;
 
 import ma.ade.kwetter2.database.interfaces.IUserDbManager;
 import ma.ade.kwetter2.database.objects.User;
+import ma.ade.kwetter2.database.objects.Token;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ejb.Stateless;
@@ -59,5 +60,12 @@ public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
         //TODO: Implement following
         return follower.getFollowing().stream().anyMatch(user -> user.getEmail().equalsIgnoreCase(followingEmail));
         //return true;
+    }
+
+    @Override
+    public void storeToken(long userId, Token token){
+        User user = em.find(User.class, userId);
+        user.addToken(token);
+        em.merge(user);
     }
 }

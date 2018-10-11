@@ -15,6 +15,7 @@ public class User implements Serializable
     private Profile profile;
     private Set<User> following;
     private Set<User> followers;
+    private Set<Token> tokens;
 
     public Long getId()
     {
@@ -72,6 +73,14 @@ public class User implements Serializable
         this.followers = followers;
     }
 
+    public Set<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Set<Token> tokens) {
+        this.tokens = tokens;
+    }
+
     public User() {
     }
 
@@ -95,7 +104,7 @@ public class User implements Serializable
         this.email = user.getEmail();
         this.profile = user.getProfile().Convert();
         this.following = user.getFollowing().stream().map(ma.ade.kwetter2.database.objects.User::Convert).collect(Collectors.toSet());
-        this.followers = new HashSet<>();
+        this.tokens = user.getTokens().stream().map(ma.ade.kwetter2.database.objects.Token::Convert).collect(Collectors.toSet());
     }
     
     public ma.ade.kwetter2.database.objects.User convert()

@@ -6,9 +6,11 @@ import io.jsonwebtoken.Jwts;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -22,6 +24,9 @@ public abstract class BaseAuthenticationHandler {
 
     @Inject
     private IKeyGenerator keyGenerator;
+
+    @Context
+    protected HttpServletRequest servletRequest;
 
     String getAccessToken(ContainerRequestContext requestContext) {
         // Get the HTTP Authorization header from the request
@@ -41,8 +46,8 @@ public abstract class BaseAuthenticationHandler {
         return accessToken;
     }
 
-    String getUsername(String accessToken){
-        Key key = keyGenerator.generate();
+    String validateToken(String accessToken, String sessionId){
+        Key key = keyGenerator.generate(sessionId);
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(accessToken);
         String username = claimsJws.getBody().getSubject();
 

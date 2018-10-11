@@ -18,7 +18,7 @@ public class UseAuthenticationHandler extends BaseAuthenticationHandler implemen
             return;
         }
         try {
-            String username = getUsername(accessToken);
+            String username = validateToken(accessToken, servletRequest.getSession().getId());
             setSecurityContext(requestContext, username);
         } catch (Exception ignored) {
         }

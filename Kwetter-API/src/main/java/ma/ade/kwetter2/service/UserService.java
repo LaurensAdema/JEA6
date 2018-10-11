@@ -1,6 +1,7 @@
 package ma.ade.kwetter2.service;
 
 import ma.ade.kwetter2.database.interfaces.IUserDbManager;
+import ma.ade.kwetter2.domain.Token;
 import ma.ade.kwetter2.domain.User;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -70,5 +71,9 @@ public class UserService
 
     public boolean isFollowing(String followerEmail, String followingEmail){
         return userDbManager.isFollowing(followerEmail, followingEmail);
+    }
+
+    public void storeToken (long userId, Token token){
+        userDbManager.storeToken(userId, token.convert());
     }
 }

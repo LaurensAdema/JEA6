@@ -19,7 +19,7 @@ public class RequireAuthenticationHandler extends BaseAuthenticationHandler impl
             return;
         }
         try {
-            String username = getUsername(accessToken);
+            String username = validateToken(accessToken, servletRequest.getSession().getId());
             setSecurityContext(requestContext, username);
         } catch (Exception e) {
             forbidden(requestContext);

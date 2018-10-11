@@ -3,6 +3,7 @@ package ma.ade.kwetter2.database.objects;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
         @NamedQuery(name = "user.getAll", query="SELECT U FROM User U"),
         //TODO: Create followers
         @NamedQuery(name = "user.getFollowers", query="SELECT U FROM User U")
-})
+        })
 public class User implements Serializable {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,8 @@ public class User implements Serializable {
     private Profile profile;
     @ManyToMany
     private Set<User> following;
+    @OneToMany
+    private Set<Token> tokens;
 
     public User() {
     }
@@ -39,6 +42,7 @@ public class User implements Serializable {
         this.password = password;
         this.profile = profile;
         this.following = following;
+        this.tokens = new HashSet<>();
     }
     
     public User(String email, String password, Profile profile)
@@ -47,6 +51,7 @@ public class User implements Serializable {
         this.password = password;
         this.profile = profile;
         this.following = new HashSet<>();
+        this.tokens = new HashSet<>();
     }
     
     public User(ma.ade.kwetter2.domain.User user)
@@ -57,6 +62,11 @@ public class User implements Serializable {
         this.profile = user.getProfile().Convert();
         if (user.getFollowing() != null) {
             this.following = user.getFollowing().stream().map(ma.ade.kwetter2.domain.User::convert).collect(Collectors.toSet());
+        } else {
+            this.following = new HashSet<>();
+        }
+        if (user.getTokens() != null) {
+            this.tokens = user.getTokens().stream().map(ma.ade.kwetter2.domain.Token::convert).collect(Collectors.toSet());
         } else {
             this.following = new HashSet<>();
         }
@@ -104,8 +114,20 @@ public class User implements Serializable {
         this.following = following;
     }
 
+    public Set<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Set<Token> tokens) {
+        this.tokens = tokens;
+    }
+
     public ma.ade.kwetter2.domain.User Convert()
     {
         return new ma.ade.kwetter2.domain.User(this);
+    }
+
+    public void addToken(Token token) {
+        this.tokens.add(token);
     }
 }

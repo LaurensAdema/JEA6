@@ -1,4 +1,5 @@
 import {Profile} from './profile';
+import {Token} from './token';
 
 export class User {
   email: string;
@@ -7,4 +8,5 @@ export class User {
   profile: Profile;
   following: Array<User>;
   followers: Array<User>;
+  tokens: Array<Token>;
 }

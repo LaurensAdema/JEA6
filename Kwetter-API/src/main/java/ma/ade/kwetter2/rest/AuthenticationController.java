@@ -11,7 +11,9 @@ import ma.ade.kwetter2.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.Key;
@@ -29,7 +31,7 @@ public class AuthenticationController extends BaseController {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(String json){
+    public Response login(@Context HttpServletRequest request, String json){
         JsonParser parser = new JsonParser();
         JsonObject jsonObj = parser.parse(json).getAsJsonObject();
 
@@ -42,7 +44,10 @@ public class AuthenticationController extends BaseController {
         }
 
         if(userService.authenticateUser(user.getId(), password)){
-            Token token = new Token(issueToken(user.getEmail()));
+            String sessionId = request.getSession().getId();
+            String tokenString = issueToken(user.getEmail(), sessionId);
+            Token token = new Token(tokenString, sessionId);
+            userService.storeToken(user.getId(), token);
             return ok(token);
         }
         else{
@@ -50,13 +55,13 @@ public class AuthenticationController extends BaseController {
         }
     }
 
-    private String issueToken(String username) {
-        Key key = keyGenerator.generate();
+    private String issueToken(String username, String sessionId) {
+        Key key = keyGenerator.generate(sessionId);
         String jwtToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(OffsetDateTime.now().plusHours(1).toInstant().toEpochMilli()))
+                .setExpiration(new Date(OffsetDateTime.now().plusMinutes(20).toInstant().toEpochMilli()))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
         return jwtToken;
