@@ -21,7 +21,7 @@ pipeline {
 			agent {
 				docker {
 					image 'microsoft/dotnet:latest'
-					args '--network host'
+					args '-v $HOME:/root --network host'
 				}
 			}
             steps {
