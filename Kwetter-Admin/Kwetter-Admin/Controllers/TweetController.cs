@@ -2,37 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ma.ade.Kwetter2.Admin.Interfaces;
 using ma.ade.Kwetter2.Admin.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kwetter2.Admin.Controllers
 {
+    [Authorize]
     public class TweetController : Controller
     {
-        private readonly TweetService _tweetService;
+        private readonly ITweetService _tweetService;
 
-        public TweetController(TweetService tweetService)
+        public TweetController(ITweetService tweetService)
         {
             _tweetService = tweetService;
         }
 
         // GET: Tweet
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(_tweetService.GetTweets());
+            return View(await _tweetService.GetAllAsync());
         }
 
         // GET: Tweet/Details/5
-        public ActionResult Details(long id)
+        public async Task<ActionResult> Details(long id)
         {
-            return View(_tweetService.GetTweet(id));
+            return View(await _tweetService.GetAsync(id));
         }
 
         // GET: Tweet/Edit/5
-        public ActionResult Edit(long id)
+        public async Task<ActionResult> Edit(long id)
         {
-            return View(_tweetService.GetTweet(id));
+            return View(await _tweetService.GetAsync(id));
         }
 
         // POST: Tweet/Edit/5
@@ -53,20 +56,19 @@ namespace Kwetter2.Admin.Controllers
         }
 
         // GET: Tweet/Delete/5
-        public ActionResult Delete(long id)
+        public async Task<ActionResult> Delete(long id)
         {
-            return View(_tweetService.GetTweet(id));
+            return View(await _tweetService.GetAsync(id));
         }
 
         // POST: Tweet/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(long id, IFormCollection collection)
+        public async Task<ActionResult> DeleteAsync(long id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                await _tweetService.DeleteAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

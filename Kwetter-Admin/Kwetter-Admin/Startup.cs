@@ -1,11 +1,16 @@
-﻿using ma.ade.Kwetter2.Admin.Service;
+﻿using ma.ade.Kwetter2.Admin.Authentication;
+using ma.ade.Kwetter2.Admin.Interfaces;
+using ma.ade.Kwetter2.Admin.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ma.ade.Kwetter2.Admin
 {
@@ -27,12 +32,19 @@ namespace ma.ade.Kwetter2.Admin
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            services.AddScoped<AuthService, AuthService>()
-                .AddScoped<UserService, UserService>()
-                .AddScoped<TweetService, TweetService>();
+            Uri baseUri = new Uri(Configuration["api:base"]);
+            services
+                .AddSingleton(Configuration)
+                .AddScoped<IKwetterAuthenticationService>(s => new AuthenticationService(Configuration, new Uri(baseUri, Configuration["api:controllers:authentication"]), null))
+                .AddScoped<IUserService>(s => new UserService(Configuration, new Uri(baseUri, Configuration["api:controllers:user"]), null))
+                .AddScoped<ITweetService>(s => new TweetService(Configuration, new Uri(baseUri, Configuration["api:controllers:tweet"]), null));
 
             services.AddCors();
+            services.AddAuthentication(KwetterAuthenticationDefaults.AuthenticationScheme)
+                .AddKwetter<IKwetterAuthenticationService>(
+                    o => { o.Realm = "Admin"; }, 
+                    s => new AuthenticationService(Configuration, new Uri(baseUri, Configuration["api:controllers:authentication"])));
+            services.AddSingleton<IPostConfigureOptions<KwetterAuthenticationOptions>, KwetterAuthenticationPostConfigureOptions>();
 
             services.AddDistributedMemoryCache();
 
@@ -42,7 +54,13 @@ namespace ma.ade.Kwetter2.Admin
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

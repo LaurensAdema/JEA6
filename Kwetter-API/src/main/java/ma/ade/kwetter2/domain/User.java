@@ -84,11 +84,12 @@ public class User implements Serializable
     public User() {
     }
 
-    public User(Long id, String email, Profile profile)
+    public User(Long id, String email, Profile profile, Set<Token> tokens)
     {
         this.id = id;
         this.email = email;
         this.profile = profile;
+        this.tokens = tokens;
     }
     
     public User(String email, String password, Profile profile)
@@ -96,6 +97,7 @@ public class User implements Serializable
         this.email = email;
         this.password = password;
         this.profile = profile;
+        this.tokens = new HashSet<>();
     }
     
     public User(ma.ade.kwetter2.database.objects.User user)
