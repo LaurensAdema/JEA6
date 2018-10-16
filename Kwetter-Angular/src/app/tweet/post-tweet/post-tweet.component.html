@@ -1,0 +1,12 @@
+<section class="post-tweet" *ngIf="user">
+  <form (ngSubmit)="onSubmit()" #postTweetForm="ngForm" class="md-form">
+    <textarea mdbInputDirective type="text" id="form-mess" class="md-textarea"
+              (keydown.enter)="$event.preventDefault();onSubmit();"
+              maxlength="140" required id="tweet" [(ngModel)]="model.message" name="tweet" #tweet="ngModel">
+    </textarea>
+    <label for="form-mess">What are you thinking about {{ user.profile.firstName }}? ({{ model.message?.length || 0 }} / 140)</label>
+    <button id="submit" type="submit" class="btn btn-primary waves-effect waves-light float-right" [disabled]="!postTweetForm.form.valid">Tweet</button>
+  </form>
+</section>
+
+

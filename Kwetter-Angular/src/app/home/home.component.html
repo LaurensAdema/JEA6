@@ -1,0 +1,7 @@
+<div class="row">
+  <app-user class="col-md-3 user-container" *ngIf="user" [componentUser]="user"></app-user>
+  <div class="col-md-9">
+    <app-post-tweet *ngIf="user"></app-post-tweet>
+    <app-timeline></app-timeline>
+  </div>
+</div>
