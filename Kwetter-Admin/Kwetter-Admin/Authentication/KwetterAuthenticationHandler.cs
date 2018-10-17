@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using ma.ade.Kwetter2.Admin.Interfaces;
+using ma.ade.Kwetter2.Admin.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using ma.ade.Kwetter2.Admin.Interfaces;
-using ma.ade.Kwetter2.Admin.Models;
 
 namespace ma.ade.Kwetter2.Admin.Authentication
 {
@@ -17,16 +18,19 @@ namespace ma.ade.Kwetter2.Admin.Authentication
         private const string AuthorizationHeaderName = "Authorization";
         private const string KwetterSchemeName = "Kwetter";
         private readonly IKwetterAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
 
         public KwetterAuthenticationHandler(
             IOptionsMonitor<KwetterAuthenticationOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IKwetterAuthenticationService authenticationService)
+            IKwetterAuthenticationService authenticationService,
+            IUserService userService)
             : base(options, logger, encoder, clock)
         {
             _authenticationService = authenticationService;
+            _userService = userService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -58,7 +62,7 @@ namespace ma.ade.Kwetter2.Admin.Authentication
             }
             string email = parts[0];
             string password = parts[1];
-            User user = new User {Email = email, Password = password};
+            User user = new User { Email = email, Password = password };
 
             Token token = await _authenticationService.LoginAsync(user);
 
@@ -66,9 +70,18 @@ namespace ma.ade.Kwetter2.Admin.Authentication
             {
                 return AuthenticateResult.Fail("Invalid username or password");
             }
-            Claim[] claims = new[] { new Claim(ClaimTypes.Name, token.AccessToken) };
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
+
+            user = await _userService.GetMeAsync();
+            Claim[] claims =
+            {
+                new Claim(ClaimTypes.Name, $"{user.Profile.FirstName} {user.Profile.LastName}"),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.UserData, token.AccessToken),
+                new Claim(ClaimTypes.AuthenticationInstant, DateTime.Now.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.DateTime),
+                new Claim(ClaimTypes.Authentication, true.ToString(), ClaimValueTypes.Boolean)
+            };
+            ClaimsIdentity identity = new ClaimsIdentity(claims, Scheme.Name);
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
             AuthenticationTicket ticket = new AuthenticationTicket(principal, Scheme.Name);
             return AuthenticateResult.Success(ticket);
         }

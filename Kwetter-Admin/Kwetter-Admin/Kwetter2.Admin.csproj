@@ -6,6 +6,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <RootNamespace>ma.ade.Kwetter2.Admin</RootNamespace>
     <AssemblyName>Kwetter2.Admin</AssemblyName>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

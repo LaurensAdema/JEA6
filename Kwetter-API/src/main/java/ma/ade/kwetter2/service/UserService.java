@@ -76,4 +76,7 @@ public class UserService
     public void storeToken (long userId, Token token){
         userDbManager.storeToken(userId, token.convert());
     }
+
+    public void updateToken(long userId, Token token) {
+    }
 }

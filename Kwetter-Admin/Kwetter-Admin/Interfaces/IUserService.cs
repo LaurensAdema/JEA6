@@ -8,5 +8,6 @@ namespace ma.ade.Kwetter2.Admin.Interfaces
 {
     public interface IUserService : IBaseService<User>
     {
+        Task<User> GetMeAsync();
     }
 }

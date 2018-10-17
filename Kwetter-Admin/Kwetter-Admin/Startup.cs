@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
@@ -35,15 +36,16 @@ namespace ma.ade.Kwetter2.Admin
             Uri baseUri = new Uri(Configuration["api:base"]);
             services
                 .AddSingleton(Configuration)
-                .AddScoped<IKwetterAuthenticationService>(s => new AuthenticationService(Configuration, new Uri(baseUri, Configuration["api:controllers:authentication"]), null))
-                .AddScoped<IUserService>(s => new UserService(Configuration, new Uri(baseUri, Configuration["api:controllers:user"]), null))
-                .AddScoped<ITweetService>(s => new TweetService(Configuration, new Uri(baseUri, Configuration["api:controllers:tweet"]), null));
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddScoped<IKwetterAuthenticationService>(s => new AuthenticationService(Configuration, s.GetService<IHttpContextAccessor>(), new Uri(baseUri, Configuration["api:controllers:authentication"])))
+                .AddScoped<IUserService>(s => new UserService(Configuration, s.GetService<IHttpContextAccessor>(), new Uri(baseUri, Configuration["api:controllers:user"])))
+                .AddScoped<ITweetService>(s => new TweetService(Configuration, s.GetService<IHttpContextAccessor>(), new Uri(baseUri, Configuration["api:controllers:tweet"])));
 
             services.AddCors();
             services.AddAuthentication(KwetterAuthenticationDefaults.AuthenticationScheme)
                 .AddKwetter<IKwetterAuthenticationService>(
                     o => { o.Realm = "Admin"; }, 
-                    s => new AuthenticationService(Configuration, new Uri(baseUri, Configuration["api:controllers:authentication"])));
+                    s => new AuthenticationService(Configuration, s.GetService<IHttpContextAccessor>(), new Uri(baseUri, Configuration["api:controllers:authentication"])));
             services.AddSingleton<IPostConfigureOptions<KwetterAuthenticationOptions>, KwetterAuthenticationPostConfigureOptions>();
 
             services.AddDistributedMemoryCache();
@@ -86,7 +88,7 @@ namespace ma.ade.Kwetter2.Admin
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Authentication}/{action=Login}/{id?}");
             });
         }
     }

@@ -2,9 +2,12 @@ package ma.ade.kwetter2.rest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ma.ade.kwetter2.authentication.IKeyGenerator;
+import ma.ade.kwetter2.authentication.RequireAuthentication;
 import ma.ade.kwetter2.domain.Token;
 import ma.ade.kwetter2.domain.User;
 import ma.ade.kwetter2.service.UserService;
@@ -19,6 +22,8 @@ import javax.ws.rs.core.Response;
 import java.security.Key;
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 @Stateless
 @Path("/auth")
@@ -53,6 +58,25 @@ public class AuthenticationController extends BaseController {
         else{
             return forbidden();
         }
+    }
+
+    @POST
+    @Path("/refresh")
+    @RequireAuthentication
+    public Response refresh(@Context HttpServletRequest request, String access_token) {
+        User me = getUser();
+        String sessionId = request.getSession().getId();
+        String token = issueToken(me.getEmail(),sessionId);
+        Set<Token> tokens = me.getTokens();
+        for (Iterator<Token> it = tokens.iterator(); it.hasNext(); ) {
+            Token t = it.next();
+            if (t.getSessionId().equals(sessionId)) {
+                t.setAccessToken(token);
+                userService.updateToken(me.getId(), t);
+            }
+
+        }
+        return ok(token);
     }
 
     private String issueToken(String username, String sessionId) {

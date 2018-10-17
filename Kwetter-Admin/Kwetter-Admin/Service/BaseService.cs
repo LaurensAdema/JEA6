@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ma.ade.Kwetter2.Admin.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace ma.ade.Kwetter2.Admin.Service
@@ -14,15 +16,25 @@ namespace ma.ade.Kwetter2.Admin.Service
     {
         private readonly HttpClient _httpClient;
         protected readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _user;
         private Uri BaseEndpoint { get; set; }
         private Token Token { get; set; }
 
-        protected BaseService(IConfiguration configuration, Uri baseEndpoint, Token token = null)
+        private ClaimsPrincipal User()
         {
-            BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
+            return _user;
+        }
+
+        protected BaseService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, Uri baseEndpoint)
+        {
             _configuration = configuration;
+            if (httpContextAccessor?.HttpContext?.User != null)
+            {
+                _user = httpContextAccessor.HttpContext.User;
+            }
+            
+            BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
             _httpClient = new HttpClient();
-            Token = token;
         }
 
         private async Task<TR> RequestExecuter<TR>(Task<HttpResponseMessage> responseTask)

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ma.ade.Kwetter2.Admin.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
