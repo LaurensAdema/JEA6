@@ -11,9 +11,8 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string) {
-    const loginRequest = this.http.post<Token>(`${environment.api_protocol}${environment.api_domain}/auth/login`,
-      {email: email, password: password});
+  login(user) {
+    const loginRequest = this.http.post<Token>(`${environment.api_protocol}${environment.api_domain}/auth/login`, user);
     loginRequest.subscribe(resp => {
       localStorage.setItem('access_token', resp.accessToken);
       this.loginEvent.next();

@@ -1,7 +1,5 @@
 package ma.ade.kwetter2.rest;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -36,19 +34,13 @@ public class AuthenticationController extends BaseController {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(@Context HttpServletRequest request, String json){
-        JsonParser parser = new JsonParser();
-        JsonObject jsonObj = parser.parse(json).getAsJsonObject();
-
-        String email = jsonObj.get("email").getAsString();
-        String password = jsonObj.get("password").getAsString();
-
-        User user = userService.getUserByEmail(email);
+    public Response login(@Context HttpServletRequest request, User inputUser){
+        User user = userService.getUserByEmail(inputUser.getEmail());
         if(user == null){
             return notFound();
         }
 
-        if(userService.authenticateUser(user.getId(), password)){
+        if(userService.authenticateUser(user.getId(), inputUser.getPassword())){
             String sessionId = request.getSession().getId();
             String tokenString = issueToken(user.getEmail(), sessionId);
             Token token = new Token(tokenString, sessionId);
@@ -60,23 +52,30 @@ public class AuthenticationController extends BaseController {
         }
     }
 
-    @POST
-    @Path("/refresh")
+    @GET
+    @Path("/challenge")
     @RequireAuthentication
-    public Response refresh(@Context HttpServletRequest request, String access_token) {
-        User me = getUser();
+    public Response challenge(@Context HttpServletRequest request, String access_token) {
         String sessionId = request.getSession().getId();
-        String token = issueToken(me.getEmail(),sessionId);
-        Set<Token> tokens = me.getTokens();
-        for (Iterator<Token> it = tokens.iterator(); it.hasNext(); ) {
-            Token t = it.next();
-            if (t.getSessionId().equals(sessionId)) {
-                t.setAccessToken(token);
-                userService.updateToken(me.getId(), t);
-            }
+        Key key = keyGenerator.generate(sessionId);
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(access_token);
+        Date expirationDate = claimsJws.getBody().getExpiration();
+        Date plusThreshold = new Date(OffsetDateTime.now().plusMinutes(1).toInstant().toEpochMilli());
+        if(expirationDate.after(plusThreshold)){
+            User me = getUser();
+            String token = issueToken(me.getEmail(),sessionId);
+            Set<Token> tokens = me.getTokens();
+            for (Iterator<Token> it = tokens.iterator(); it.hasNext(); ) {
+                Token t = it.next();
+                if (t.getSessionId().equals(sessionId)) {
+                    t.setAccessToken(token);
+                    userService.updateToken(me.getId(), t);
+                }
 
+            }
+            return ok(token);
         }
-        return ok(token);
+        return ok();
     }
 
     private String issueToken(String username, String sessionId) {

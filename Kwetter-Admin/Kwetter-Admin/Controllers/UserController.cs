@@ -79,7 +79,7 @@ namespace Kwetter2.Admin.Controllers
         }
 
         // GET: User/Delete/5
-        public async Task<ActionResult> DeleteAsync(long id)
+        public async Task<ActionResult> Delete(long id)
         {
             return View(await _userService.GetAsync(id));
         }

@@ -2,14 +2,59 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kwetter Admin</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/login.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/login.min.css" asp-append-version="true" />
+    </environment>
 </head>
-<body>
+<body id="LoginForm">
+    <div class="container">
+        <h1 class="form-heading">login Form</h1>
+        <div class="login-form">
+            <div class="main-div">
+                <div class="panel">
+                    <h2>Admin Login</h2>
+                    <p>Please enter your email and password</p>
+                </div>
+                <form asp-action="Login" id="Login">
+                    <div class="form-group">
+
+
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+
+                    </div>
+                    <div class="forgot">
+                        <a href="reset.html">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+
+                </form>
+            </div>
+            <p class="botto-text"> Designed by Sunil Rajput</p>
+        </div>
+    </div>
 </body>
 </html>
+

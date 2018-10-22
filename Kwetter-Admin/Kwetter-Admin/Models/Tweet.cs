@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace ma.ade.Kwetter2.Admin.Models
 {
+    [Serializable]
     public class Tweet
     {
         public long Id { get; set; }

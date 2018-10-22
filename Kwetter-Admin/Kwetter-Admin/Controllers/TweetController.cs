@@ -64,7 +64,7 @@ namespace Kwetter2.Admin.Controllers
         // POST: Tweet/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(long id, IFormCollection collection)
+        public async Task<ActionResult> Delete(long id, IFormCollection collection)
         {
             try
             {

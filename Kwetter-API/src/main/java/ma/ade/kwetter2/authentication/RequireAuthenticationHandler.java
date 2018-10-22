@@ -14,6 +14,7 @@ public class RequireAuthenticationHandler extends BaseAuthenticationHandler impl
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String accessToken = getAccessToken(requestContext);
+        String sessionId = servletRequest.getSession().getId();
         if(accessToken == null || accessToken.isEmpty()){
             unauthorized(requestContext);
             return;
@@ -22,7 +23,7 @@ public class RequireAuthenticationHandler extends BaseAuthenticationHandler impl
             String username = validateToken(accessToken, servletRequest.getSession().getId());
             setSecurityContext(requestContext, username);
         } catch (Exception e) {
-            forbidden(requestContext);
+            unauthorized(requestContext);
         }
     }
 }

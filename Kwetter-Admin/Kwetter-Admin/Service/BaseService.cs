@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Hanssens.Net;
+using ma.ade.Kwetter2.Admin.Extensions;
 using ma.ade.Kwetter2.Admin.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -18,12 +20,7 @@ namespace ma.ade.Kwetter2.Admin.Service
         protected readonly IConfiguration _configuration;
         private readonly ClaimsPrincipal _user;
         private Uri BaseEndpoint { get; set; }
-        private Token Token { get; set; }
-
-        private ClaimsPrincipal User()
-        {
-            return _user;
-        }
+        protected Token Token { get; set; }
 
         protected BaseService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, Uri baseEndpoint)
         {
@@ -31,6 +28,16 @@ namespace ma.ade.Kwetter2.Admin.Service
             if (httpContextAccessor?.HttpContext?.User != null)
             {
                 _user = httpContextAccessor.HttpContext.User;
+                if (_user.HasClaim(c => c.Type.Equals(ClaimTypes.UserData)))
+                {
+                    Token = new Token { AccessToken = _user.FindFirstValue("UserData"), SessionId = httpContextAccessor.HttpContext.Session.Id };
+                }
+                
+            }
+
+            if (Token == null && httpContextAccessor?.HttpContext?.Session != null && httpContextAccessor.HttpContext.Session.TryGetValue("token", out byte[] tokenBytes) && tokenBytes != null)
+            {
+                Token = tokenBytes.ToObject<Token>();
             }
             
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
@@ -59,9 +66,9 @@ namespace ma.ade.Kwetter2.Admin.Service
 
         protected async Task DeleteAsync(Uri requestUrl) => await RequestExecuter(_httpClient.DeleteAsync(requestUrl));
 
-        protected async Task<TR> PostAsync<TR, TP>(Uri requestUrl, params TP[] content) => await RequestExecuter<TR>(_httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent(content)));
+        protected async Task<TR> PostAsync<TR, TP>(Uri requestUrl, TP content) => await RequestExecuter<TR>(_httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent(content)));
 
-        protected async Task PostAsync<TP>(Uri requestUrl, params TP[] content) => await RequestExecuter(_httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent(content)));
+        protected async Task PostAsync<TP>(Uri requestUrl, TP content) => await RequestExecuter(_httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent(content)));
 
         protected async Task<TR> PutAsync<TR>(Uri requestUrl, TR content) => await RequestExecuter<TR>(_httpClient.PutAsync(requestUrl.ToString(), CreateHttpContent(content)));
 
@@ -73,8 +80,7 @@ namespace ma.ade.Kwetter2.Admin.Service
 
         protected Uri CreateRequestUri(string relativePath, string queryString = "")
         {
-            Uri endpoint = new Uri(BaseEndpoint, relativePath);
-            UriBuilder uriBuilder = new UriBuilder(endpoint)
+            UriBuilder uriBuilder = new UriBuilder(new Uri(BaseEndpoint.AbsoluteUri + relativePath))
             {
                 Query = queryString
             };
@@ -89,13 +95,17 @@ namespace ma.ade.Kwetter2.Admin.Service
 
         private static JsonSerializerSettings MicrosoftDateFormatSettings => new JsonSerializerSettings
         {
-            DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
+            DateFormatHandling = DateFormatHandling.IsoDateFormat,
+            NullValueHandling = NullValueHandling.Ignore
         };
 
         private void AddHeaders()
         {
-            _httpClient.DefaultRequestHeaders.Remove("Authorization");
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.AccessToken}");
+            if (Token != null)
+            {
+                _httpClient.DefaultRequestHeaders.Remove("Authorization");
+                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.AccessToken}");
+            }
         }
 
         public virtual async Task<T> GetAsync(long id) => await GetAsync<T>(CreateRequestUri("", $"id={id}"));

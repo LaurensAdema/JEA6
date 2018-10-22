@@ -58,13 +58,13 @@
         <form (ngSubmit)="doLogin()" #loginForm="ngForm" id="login-form">
           <div class="md-form form-sm">
             <i class="fa fa-envelope prefix"></i>
-            <input mdbInputDirective type="email" id="email" class="form-control" name="email" required [(ngModel)]="login.email">
+            <input mdbInputDirective type="email" id="email" class="form-control" name="email" required [(ngModel)]="loginUser.email">
             <label for="email">Your email</label>
           </div>
 
           <div class="md-form form-sm">
             <i class="fa fa-lock prefix"></i>
-            <input mdbInputDirective type="password" id="password" class="form-control" name="password" required [(ngModel)]="login.password">
+            <input mdbInputDirective type="password" id="password" class="form-control" name="password" required [(ngModel)]="loginUser.password">
             <label for="password">Your password</label>
           </div>
 

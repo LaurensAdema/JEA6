@@ -18,7 +18,20 @@ namespace ma.ade.Kwetter2.Admin.Service
         {
             try
             {
-                return await base.PostAsync<Token, User>(base.CreateRequestUri(_configuration["api:authentication:login"]), user);
+                return await PostAsync<Token, User>(CreateRequestUri(_configuration["api:authentication:login"]), user);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<Token> ChallengeAsync()
+        {
+            try
+            {
+                return await GetAsync<Token>(CreateRequestUri(_configuration["api:authentication:challenge"], $"access_token={Token.AccessToken}"));
             }
             catch (Exception e)
             {

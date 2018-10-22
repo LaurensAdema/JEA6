@@ -65,6 +65,7 @@ public class UserDbManager extends BaseDbManager<User> implements IUserDbManager
     @Override
     public void storeToken(long userId, Token token){
         User user = em.find(User.class, userId);
+        em.persist(token);
         user.addToken(token);
         em.merge(user);
     }

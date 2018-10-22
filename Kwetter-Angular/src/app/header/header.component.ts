@@ -12,7 +12,7 @@ import {UserService} from '../api/user.service';
 })
 export class HeaderComponent implements OnInit {
   user: User;
-  login: Login;
+  loginUser: User;
   search: string;
   error: string;
 
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
     this.loadUser();
     this.authService.loginEvent$.subscribe(() => this.loadUser());
 
-    this.login = new Login();
+    this.loginUser = new User();
     this.search = '';
   }
 
@@ -37,13 +37,13 @@ export class HeaderComponent implements OnInit {
   }
 
   doLogin() {
-    this.authService.login(this.login.email, this.login.password)
+    this.authService.login(this.loginUser)
       .subscribe(resp => {
-        this.login = new Login();
+        this.loginUser = new User();
         this.loginModal.hide();
         this.error = '';
       }, error => {
-        this.login.password = '';
+        this.loginUser.password = '';
         this.error = error.toString();
       });
   }
