@@ -19,5 +19,6 @@ namespace ma.ade.Kwetter2.Admin.Models
         public IEnumerable<User> Following { get; set; }
 
         public IEnumerable<User> Followers { get; set; }
+        public IEnumerable<Token> Tokens { get; set; }
     }
 }

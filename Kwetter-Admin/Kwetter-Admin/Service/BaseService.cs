@@ -18,29 +18,27 @@ namespace ma.ade.Kwetter2.Admin.Service
     {
         private readonly HttpClient _httpClient;
         protected readonly IConfiguration _configuration;
-        private readonly ClaimsPrincipal _user;
-        private Uri BaseEndpoint { get; set; }
-        protected Token Token { get; set; }
+        protected readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Uri _baseEndpoint;
+
+        protected Token Token
+        {
+            get
+            {
+                if (_httpContextAccessor?.HttpContext?.Session != null && _httpContextAccessor.HttpContext.Session.TryGetValue("token", out byte[] tokenBytes) && tokenBytes != null)
+                {
+                    return tokenBytes.ToObject<Token>();
+                }
+
+                return null;
+            }
+        }
 
         protected BaseService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, Uri baseEndpoint)
         {
             _configuration = configuration;
-            if (httpContextAccessor?.HttpContext?.User != null)
-            {
-                _user = httpContextAccessor.HttpContext.User;
-                if (_user.HasClaim(c => c.Type.Equals(ClaimTypes.UserData)))
-                {
-                    Token = new Token { AccessToken = _user.FindFirstValue("UserData"), SessionId = httpContextAccessor.HttpContext.Session.Id };
-                }
-                
-            }
-
-            if (Token == null && httpContextAccessor?.HttpContext?.Session != null && httpContextAccessor.HttpContext.Session.TryGetValue("token", out byte[] tokenBytes) && tokenBytes != null)
-            {
-                Token = tokenBytes.ToObject<Token>();
-            }
-            
-            BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
+            _httpContextAccessor = httpContextAccessor;
+            _baseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
             _httpClient = new HttpClient();
         }
 
@@ -80,7 +78,7 @@ namespace ma.ade.Kwetter2.Admin.Service
 
         protected Uri CreateRequestUri(string relativePath, string queryString = "")
         {
-            UriBuilder uriBuilder = new UriBuilder(new Uri(BaseEndpoint.AbsoluteUri + relativePath))
+            UriBuilder uriBuilder = new UriBuilder(new Uri(_baseEndpoint.AbsoluteUri + relativePath))
             {
                 Query = queryString
             };
@@ -108,7 +106,7 @@ namespace ma.ade.Kwetter2.Admin.Service
             }
         }
 
-        public virtual async Task<T> GetAsync(long id) => await GetAsync<T>(CreateRequestUri("", $"id={id}"));
+        public virtual async Task<T> GetAsync(long id) => await GetAsync<T>(CreateRequestUri($"/{id}"));
 
         public virtual async Task<IEnumerable<T>> GetAllAsync() => await GetAsync<IEnumerable<T>>(CreateRequestUri(""));
 
@@ -116,6 +114,6 @@ namespace ma.ade.Kwetter2.Admin.Service
 
         public virtual async Task UpdateAsync(T entity) => await PatchAsyncVoid(CreateRequestUri(""), entity);
 
-        public virtual async Task DeleteAsync(long id) => await DeleteAsync(CreateRequestUri("", $"id={id}"));
+        public virtual async Task DeleteAsync(long id) => await DeleteAsync(CreateRequestUri($"/{id}"));
     }
 }

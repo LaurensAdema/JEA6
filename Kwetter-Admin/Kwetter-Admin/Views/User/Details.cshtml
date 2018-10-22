@@ -24,14 +24,53 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
+            @Html.DisplayNameFor(model => model.Tokens)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Password)
+            @if (Model.Tokens.Any())
+            {
+                <table class="table" id="tokens-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Tokens.First().AccessToken)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Tokens.First().RemoteAddress)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Tokens.First().IssuedAt)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Tokens.First().ExpirationDate)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var token in Model.Tokens)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => token.AccessToken)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => token.RemoteAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => token.IssuedAt)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => token.ExpirationDate)
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
         </dd>
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     <a asp-action="Index">Back to List</a>
 </div>

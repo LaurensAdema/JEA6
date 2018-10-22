@@ -28,6 +28,20 @@ body {
     margin: 15px;
 }
 
+.table tr td {
+    white-space: nowrap;
+}
+
+table#tokens-table tr td:first-child {
+    word-break: break-all;
+    white-space: normal;
+}
+
+table#tweets-table tr td:nth-child(3) {
+    word-break: break-all;
+    white-space: normal;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

@@ -60,8 +60,9 @@ public class TweetController extends BaseController {
     }
 
     @DELETE
+    @Path("/{id}")
     @RequireAuthentication
-    public Response DeleteTweet(long tweetID){
+    public Response DeleteTweet(@PathParam("id") long tweetID){
         tweetService.removeTweet(tweetID);
         return Response.ok().build();
     }

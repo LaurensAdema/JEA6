@@ -14,13 +14,13 @@ public class RequireAuthenticationHandler extends BaseAuthenticationHandler impl
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String accessToken = getAccessToken(requestContext);
-        String sessionId = servletRequest.getSession().getId();
+        String remoteAddr = servletRequest.getRemoteAddr();
         if(accessToken == null || accessToken.isEmpty()){
             unauthorized(requestContext);
             return;
         }
         try {
-            String username = validateToken(accessToken, servletRequest.getSession().getId());
+            String username = validateToken(accessToken, remoteAddr);
             setSecurityContext(requestContext, username);
         } catch (Exception e) {
             unauthorized(requestContext);

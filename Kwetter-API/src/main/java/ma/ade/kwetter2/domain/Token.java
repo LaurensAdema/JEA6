@@ -2,11 +2,14 @@ package ma.ade.kwetter2.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @XmlRootElement
 public class Token implements Serializable {
     private String accessToken;
-    private String sessionId;
+    private String remoteAddress;
+    private OffsetDateTime issuedAt;
+    private OffsetDateTime expirationDate;
 
     public String getAccessToken() {
         return accessToken;
@@ -16,12 +19,28 @@ public class Token implements Serializable {
         this.accessToken = accessToken;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getRemoteAddress() {
+        return remoteAddress;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setRemoteAddress(String sessionId) {
+        this.remoteAddress = sessionId;
+    }
+
+    public OffsetDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(OffsetDateTime issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public OffsetDateTime getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(OffsetDateTime expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public Token() {
@@ -29,12 +48,16 @@ public class Token implements Serializable {
 
     public Token(ma.ade.kwetter2.database.objects.Token token) {
         this.accessToken = token.getAccessToken();
-        this.sessionId = token.getSessionId();
+        this.remoteAddress = token.getRemoteAddress();
+        this.issuedAt = token.getIssuedAt();
+        this.expirationDate = token.getExpirationDate();
     }
 
-    public Token(String accessToken, String sessionId) {
+    public Token(String accessToken, String remoteAddress, OffsetDateTime issuedAt, OffsetDateTime expirationDate) {
         this.accessToken = accessToken;
-        this.sessionId = sessionId;
+        this.remoteAddress = remoteAddress;
+        this.issuedAt = issuedAt;
+        this.expirationDate = expirationDate;
     }
 
     public ma.ade.kwetter2.database.objects.Token convert()

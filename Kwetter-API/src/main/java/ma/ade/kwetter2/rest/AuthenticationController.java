@@ -41,9 +41,8 @@ public class AuthenticationController extends BaseController {
         }
 
         if(userService.authenticateUser(user.getId(), inputUser.getPassword())){
-            String sessionId = request.getSession().getId();
-            String tokenString = issueToken(user.getEmail(), sessionId);
-            Token token = new Token(tokenString, sessionId);
+            String remoteAddr = request.getRemoteAddr();
+            Token token = issueToken(user.getEmail(), remoteAddr);
             userService.storeToken(user.getId(), token);
             return ok(token);
         }
@@ -55,38 +54,33 @@ public class AuthenticationController extends BaseController {
     @GET
     @Path("/challenge")
     @RequireAuthentication
-    public Response challenge(@Context HttpServletRequest request, String access_token) {
-        String sessionId = request.getSession().getId();
-        Key key = keyGenerator.generate(sessionId);
+    public Response challenge(@Context HttpServletRequest request, @QueryParam("access_token") String access_token) {
+        String remoteAddress = request.getRemoteAddr();
+        Key key = keyGenerator.generate(remoteAddress);
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(access_token);
         Date expirationDate = claimsJws.getBody().getExpiration();
-        Date plusThreshold = new Date(OffsetDateTime.now().plusMinutes(1).toInstant().toEpochMilli());
-        if(expirationDate.after(plusThreshold)){
+        Date plusThreshold = new Date(OffsetDateTime.now().plusMinutes(3).toInstant().toEpochMilli());
+        if(expirationDate.before(plusThreshold)){
             User me = getUser();
-            String token = issueToken(me.getEmail(),sessionId);
-            Set<Token> tokens = me.getTokens();
-            for (Iterator<Token> it = tokens.iterator(); it.hasNext(); ) {
-                Token t = it.next();
-                if (t.getSessionId().equals(sessionId)) {
-                    t.setAccessToken(token);
-                    userService.updateToken(me.getId(), t);
-                }
-
-            }
+            Token token = issueToken(me.getEmail(),remoteAddress);
+            userService.storeToken(me.getId(), token);
             return ok(token);
         }
         return ok();
     }
 
-    private String issueToken(String username, String sessionId) {
-        Key key = keyGenerator.generate(sessionId);
+    private Token issueToken(String username, String remoteAddress) {
+        Key key = keyGenerator.generate(remoteAddress);
+        OffsetDateTime issuedAt = OffsetDateTime.now();
+        OffsetDateTime expirationDate = issuedAt.plusMinutes(20);
         String jwtToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(OffsetDateTime.now().plusMinutes(20).toInstant().toEpochMilli()))
+                .setIssuedAt(new Date(issuedAt.toInstant().toEpochMilli()))
+                .setExpiration(new Date(expirationDate.toInstant().toEpochMilli()))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
-        return jwtToken;
+        Token token = new Token(jwtToken, remoteAddress, issuedAt, expirationDate);
+        return token;
     }
 }

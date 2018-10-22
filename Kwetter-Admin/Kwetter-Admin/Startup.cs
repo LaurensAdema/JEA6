@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -84,11 +85,21 @@ namespace ma.ade.Kwetter2.Admin
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
+            app.UseStatusCodePages(async context => {
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)   
+                {
+                    response.Redirect("/");
+                }
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Authentication}/{action=Login}/{id?}");
+                routes.MapRoute("index_route", "{controller}",
+                    defaults: new { action = "Index" });
             });
         }
     }

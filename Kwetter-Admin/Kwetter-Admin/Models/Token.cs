@@ -9,6 +9,8 @@ namespace ma.ade.Kwetter2.Admin.Models
     public class Token
     {
         public string AccessToken { get; set; }
-        public string SessionId { get; set; }
+        public string RemoteAddress { get; set; }
+        public DateTime IssuedAt { get; set; }
+        public DateTime ExpirationDate { get; set; }
     }
 }

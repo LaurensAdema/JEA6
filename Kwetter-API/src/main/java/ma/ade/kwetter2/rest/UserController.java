@@ -52,8 +52,9 @@ public class UserController extends BaseController {
     }
 
     @DELETE
+    @Path("/{id}")
     @RequireAuthentication
-    public Response DeleteUser(long userID){
+    public Response DeleteUser(@PathParam("id") long userID){
         userService.removeUser(userID);
         return ok();
     }

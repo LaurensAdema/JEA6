@@ -5,13 +5,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Entity
 @XmlRootElement
 public class Token implements Serializable {
     @Id
     private String accessToken;
-    private String sessionId;
+    private String remoteAddress;
+    private OffsetDateTime issuedAt;
+    private OffsetDateTime expirationDate;
 
     @ManyToOne
     private User user;
@@ -21,7 +24,9 @@ public class Token implements Serializable {
 
     public Token(ma.ade.kwetter2.domain.Token token) {
         this.accessToken = token.getAccessToken();
-        this.sessionId = token.getSessionId();
+        this.remoteAddress = token.getRemoteAddress();
+        this.issuedAt = token.getIssuedAt();
+        this.expirationDate = token.getExpirationDate();
     }
 
     public String getAccessToken() {
@@ -32,12 +37,12 @@ public class Token implements Serializable {
         this.accessToken = accessToken;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getRemoteAddress() {
+        return remoteAddress;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setRemoteAddress(String remoteaddress) {
+        this.remoteAddress = remoteAddress;
     }
 
     public User getUser() {
@@ -46,6 +51,22 @@ public class Token implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public OffsetDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(OffsetDateTime issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public OffsetDateTime getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(OffsetDateTime expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public ma.ade.kwetter2.domain.Token Convert()

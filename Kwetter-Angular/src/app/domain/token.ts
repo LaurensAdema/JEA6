@@ -1,4 +1,6 @@
 export class Token {
   accessToken: string;
-  sessionId: string;
+  remoteAddress: string;
+  issuedAt: Date;
+  expirationDate: Date;
 }

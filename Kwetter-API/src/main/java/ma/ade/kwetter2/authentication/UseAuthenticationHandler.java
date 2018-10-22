@@ -14,11 +14,12 @@ public class UseAuthenticationHandler extends BaseAuthenticationHandler implemen
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String accessToken = getAccessToken(requestContext);
+        String remoteAddr = servletRequest.getRemoteAddr();
         if(accessToken == null || accessToken.isEmpty()){
             return;
         }
         try {
-            String username = validateToken(accessToken, servletRequest.getSession().getId());
+            String username = validateToken(accessToken, remoteAddr);
             setSecurityContext(requestContext, username);
         } catch (Exception ignored) {
         }
